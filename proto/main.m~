@@ -1,0 +1,17 @@
+close all;
+
+model = imread('model.gif');
+img = imread('image.gif');
+
+modelE = edge(model, 'Canny');
+imgE = edge(img, 'Canny');
+
+afficheImg(modelE, 'Canny model');
+afficheImg(imgE, 'Canny image');
+
+[Ue Ve] = getCoords(modelE);
+[Ui Vi] = getCoords(imgE);
+A = [Ue; Ve];
+B = [Ui; Vi];
+%hD1(A, B);
+Hf1(A, A, @hD1)
