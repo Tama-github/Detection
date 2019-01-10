@@ -5,7 +5,7 @@
 
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
-    std::string path = "../Ressources/" + fileName;
+    std::string path = "../../Ressources/" + fileName;
 
     try{
         img = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
@@ -21,7 +21,7 @@ cv::Mat ImageManager::imread(std::string fileName) {
 bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     bool res = false;
 
-    std::string path = "../Ressources/" + fileName;
+    std::string path = "../../Ressources/" + fileName;
 
     try {
         res = cv::imwrite(path,img);
