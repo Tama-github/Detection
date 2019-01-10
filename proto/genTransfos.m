@@ -47,7 +47,7 @@ for i=I1Min:stepI1:I1Max
                 a11 = e4(4);
                 det = a00*a11 - a01*a10;
                 skewTest = max([(sqrt(a00^2 + a10^2)/(sqrt(a01^2 + a11^2)) ), (sqrt(a01^2 + a11^2)/(sqrt(a00^2 + a10^2)) )]) <= aMax;
-                scaleTest = (abs(a00*a01 + a10*11)/(sqrt(a00^2 + a10^2) * sqrt(a01^2 + a11^2))) <= sMax;
+                scaleTest = (abs(a00*a01 + a10*a11)/(sqrt(a00^2 + a10^2) * sqrt(a01^2 + a11^2))) <= sMax;
                 detTest = (det > 0) && (det > dMin) && (det < dMax);
                 if (skewTest && scaleTest && detTest)
                     transfos = [transfos toAffine(base)];
