@@ -1,0 +1,36 @@
+ExternalProject_Add(
+        glm
+
+        # where the source will live
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/glm"
+
+        # override default behaviours
+        UPDATE_COMMAND ""
+
+        GIT_SUBMODULES submodule/glm
+        # set the installatin to root
+        # INSTALL_COMMAND cmake -E echo "Skipping install step."
+        INSTALL_DIR "${SUBMODULE_INSTALL_DIRECTORY}"
+        CMAKE_GENERATOR ${CMAKE_GENERATOR}
+        CMAKE_GENERATOR_TOOLSET ${CMAKE_GENERATOR_TOOLSET}
+        CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE=${SUBMODULES_BUILD_TYPE}
+        -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+        -DCMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}
+        -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
+        -DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}
+        -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+        STEP_TARGETS install
+        EXCLUDE_FROM_ALL TRUE
+)
+
+add_custom_target(glm_lib
+DEPENDS glm
+)
+
+set(GLM_INCLUDE_DIR ${SUBMODULE_INSTALL_DIRECTORY}/include/)
+
