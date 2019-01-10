@@ -8,7 +8,8 @@ int main(int, char *[]) {
     cv::Mat img;
     img = im->imread("de.png");
 
-    im->getCoord(img);
-    std::cout << "is ok, press something" << std::endl;
+    std::vector<glm::vec2> cloud = im->getCoord(img);
+
+    std::cout << "is ok, press something" << std::endl;       
     return 0;
 }

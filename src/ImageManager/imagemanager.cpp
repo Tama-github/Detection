@@ -1,8 +1,5 @@
 #include "imagemanager.hpp"
 
-#include <opencv2/core/core.hpp>
-
-
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
     std::string path = "../../Ressources/" + fileName;
@@ -32,19 +29,21 @@ bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     return res;
 }
 
-int ** ImageManager::getCoord(cv::Mat img){
-    cv::Mat edge,cloud;
+std::vector<glm::vec2> ImageManager::getCoord(cv::Mat img){
+    cv::Mat edge,matCloud;
     cv::Canny(img,edge,50,150);
 
-    cv::findNonZero(edge,cloud);
+    cv::findNonZero(edge,matCloud);
 
+    std::vector<glm::vec2> cloud;
 
-    for (int i = 0; i < cloud.total(); i++ ) {
-        std::cout << "Zero#" << i << ": " << cloud.at<cv::Point>(i).x << ", " << cloud.at<cv::Point>(i).y << std::endl;
+    for (int i = 0; i < matCloud.total(); i++ ) {
+        cloud.push_back(glm::vec2(matCloud.at<cv::Point>(i).x,matCloud.at<cv::Point>(i).y));
+        //std::cout << "Zero#" << i << ": " << cloud.at<cv::Point>(i).x << ", " << cloud.at<cv::Point>(i).y << std::endl;
     }
 
     edge.release();
-    cloud.release();
+    matCloud.release();
 
-    return nullptr;
+    return cloud;
 }
