@@ -22,7 +22,7 @@ I4Max = bornes(4,2);
 stepI1 = steps(1);
 stepI2 = steps(2);
 stepI3 = steps(3);
-stepI4 = steps(4);
+stepI4 = steps(4); 
 
 
 

@@ -1,41 +1,51 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.0.2)
 
-set(APPLICATION Detection)
-project(${APPLICATION})
+project(Detection)
 
-# -std=c++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+# Be nice and export compile commands by default, this is handy for clang-tidy
+# and for other tools.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(OpenCV REQUIRED) # define OPENGL_LIBRARIES
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+# We can use include() and find_package() for scripts in there
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-# Add Sources
-FILE(GLOB_RECURSE
-    folder_source
-    ${CMAKE_SOURCE_DIR}/src/*.cpp
-)
+# Ask for C++17 for all files
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-FILE(GLOB_RECURSE
-    folder_header
-    ${CMAKE_SOURCE_DIR}/src/*.h
+# Enable helpfull warnings
+#add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -Wunused -pedantic)
+add_compile_options(-Wall -Wextra -Wunused)
 
-)
+set(BUILD_DIRECTORY            ${CMAKE_CURRENT_SOURCE_DIR}/build)
+# Set default install location to dist folder in build dir
+# we do not want to install to /usr by default
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set (CMAKE_INSTALL_PREFIX "${BUILD_DIRECTORY}" CACHE PATH
+            "Install path prefix, prepended onto install directories." FORCE )
+endif()
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/src
-)
+set(BIN_DIRECTORY              ${BUILD_DIRECTORY})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY   ${BIN_DIRECTORY}/bin)
+set(EXECUTABLE_OUTPUT_PATH           ${BIN_DIRECTORY}/bin)
+set(LIBRARY_OUTPUT_PATH              ${BIN_DIRECTORY}/lib)
 
-SOURCE_GROUP("Source Files" FILES ${folder_source})
-SOURCE_GROUP("Header Files" FILES ${folder_header})
-#SOURCE_GROUP("Shader Files" FILES ${folder_shader})
+set(SRC_DIR                    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(${APPLICATION}
-               ${folder_source}
-               ${folder_header}
-               )
 
-#set(EXT_LIBS ${OPENGL_gl_LIBRARY} )
-target_link_libraries(${APPLICATION} ${OpenCV_LIBS} )
+################################################################################
+# Build submodule
+
+include(SUBMODULE)
+
+set(INCLUDE_DIRS)
+list(APPEND INCLUDE_DIRS "${SRC_DIR}" "${GLM_INCLUDE_DIR}")
+
+################################################################################
+#Build
+add_subdirectory(${SRC_DIR})
+
+
+
