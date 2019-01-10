@@ -5,7 +5,10 @@
 int main(int, char *[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager;
+    cv::Mat img;
+    img = im->imread("de.png");
 
-    std::cout << "is ok" << std::endl;
+    im->getCoord(img);
+    std::cout << "is ok, press something" << std::endl;
     return 0;
 }

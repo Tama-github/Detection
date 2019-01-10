@@ -6,13 +6,12 @@
 
 class ImageManager
 {
-public:
-    ImageManager();
-    ~ImageManager();
+public:    
     cv::Mat imread(std::string fileName);
     bool imwrite(const std::string& fileName, cv::Mat img);
-    // Transform l'image en nuage de point (imread>Canny>Nuage)
-    // Type getCoord()
+    // Transforme l'image en nuage de point (imread>Canny>Nuage)
+    int** getCoord(cv::Mat img);
+
 };
 
 #endif // IMAGEMANAGER_HPP

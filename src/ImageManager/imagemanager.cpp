@@ -1,16 +1,11 @@
 #include "imagemanager.hpp"
 
-ImageManager::ImageManager() {
-    std::cout<<"ImageManager : Creation"<<std::endl;
-}
+#include <opencv2/core/core.hpp>
 
-ImageManager::~ImageManager() {
-    std::cout<<"ImageManager : Destruction"<<std::endl;
-}
 
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
-    std::string path = "../Ressources/" + fileName;
+    std::string path = "../../Ressources/" + fileName;
 
     try{
         img = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
@@ -26,14 +21,30 @@ cv::Mat ImageManager::imread(std::string fileName) {
 bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     bool res = false;
 
-    std::string path = "../Ressources/" + fileName;
+    std::string path = "../../Ressources/" + fileName;
 
     try {
         res = cv::imwrite(path,img);
     }
     catch (std::exception& ex) {
-        std::cout << "Exception converting image to PNG format: " << ex.what()
-                     ;
+        std::cout << "Exception converting image to PNG format: " << ex.what();
     }
     return res;
+}
+
+int ** ImageManager::getCoord(cv::Mat img){
+    cv::Mat edge,cloud;
+    cv::Canny(img,edge,50,150);
+
+    cv::findNonZero(edge,cloud);
+
+
+    for (int i = 0; i < cloud.total(); i++ ) {
+        std::cout << "Zero#" << i << ": " << cloud.at<cv::Point>(i).x << ", " << cloud.at<cv::Point>(i).y << std::endl;
+    }
+
+    edge.release();
+    cloud.release();
+
+    return nullptr;
 }
