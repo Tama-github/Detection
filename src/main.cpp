@@ -24,14 +24,15 @@ int main(int, char *[]) {
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     //transforms = raster->transformFilter(transforms, 252, 238, modelC);
 
-/*//suppression
+*/
+//suppression
     cv::Size sz = img.size();
     CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
 
     tree.displayMe();
 
-//*/
+/*
 
     std::cout << "is ok, press something" << std::endl;       
     for (unsigned int i = 0; i < transforms.size(); i++) {
