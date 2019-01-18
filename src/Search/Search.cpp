@@ -46,7 +46,7 @@ Transforms Search::search(std::vector<glm::vec2> &modelCloud, std::vector<glm::v
         std::cout << "dist = " << dist << std::endl;
 
         //TODO Set good condition to select a transform
-        if (dist < 2*std::sqrt(2))
+        if (forwardCriterion(tmpModel, subImage, ff, tf) && reverseCriterion(tmpModel, subImage, fr, tr))
             validTrans.emplace_back(transforms[i]);
         //std::cout << float(i+1)/float(transforms.size())*100.f << "%" << std::endl;
     }
