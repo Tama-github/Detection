@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <Search/Search.hpp>
 #include <Cloud/cloud.hpp>
+#include <string>
 
 class ImageManager
 {
@@ -19,6 +20,9 @@ public:
 
     // Point cloud to image
     void cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img);
+
+private:
+    std::string getEnvPath();
 
 };
 

@@ -1,11 +1,12 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "ImageManager/imagemanager.hpp"
+#include "CellTree/CellTree.hpp"
 #include "Raster/raster.hpp"
 #include "Search/Search.hpp"
 
 
-int main(int, char *[]) {
+int main(int, char *arg[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager();
     Raster *raster = new Raster();
@@ -23,6 +24,21 @@ int main(int, char *[]) {
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     //transforms = raster->transformFilter(transforms, 252, 238, modelC);
 
+*/
+//suppression Valérian
+    cv::Size sz = img.size();
+    CellTree tree = CellTree(0,300,0,300);
+    tree.subdivideCell();
+
+    cv::namedWindow("TEst");    
+    cv::imshow("Display window",img);
+    cv::waitKey(0);
+
+
+//
+/*
+
+    std::cout << "is ok, press something" << std::endl;       
     for (unsigned int i = 0; i < transforms.size(); i++) {
         std::cout << "blabla0" << std::endl;
         std::vector<glm::vec2> temp = Cloud::transformCloud(modelC, transforms[i]);

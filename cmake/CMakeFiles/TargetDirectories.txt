@@ -1,0 +1,8 @@
+/home/comput-6/anim/Detection/cmake/CMakeFiles/edit_cache.dir
+/home/comput-6/anim/Detection/cmake/CMakeFiles/glm_lib.dir
+/home/comput-6/anim/Detection/cmake/CMakeFiles/glm.dir
+/home/comput-6/anim/Detection/cmake/CMakeFiles/rebuild_cache.dir
+/home/comput-6/anim/Detection/cmake/CMakeFiles/glm-install.dir
+/home/comput-6/anim/Detection/cmake/src/CMakeFiles/rebuild_cache.dir
+/home/comput-6/anim/Detection/cmake/src/CMakeFiles/Detection.dir
+/home/comput-6/anim/Detection/cmake/src/CMakeFiles/edit_cache.dir
