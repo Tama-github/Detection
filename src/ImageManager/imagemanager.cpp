@@ -37,8 +37,8 @@ std::vector<glm::vec2> ImageManager::getCoord(cv::Mat img){
 
     std::vector<glm::vec2> cloud;
 
-    for (int i = 0; i < matCloud.total(); i++ ) {
-        cloud.push_back(glm::vec2(matCloud.at<cv::Point>(i).x,matCloud.at<cv::Point>(i).y));
+    for (unsigned int i = 0; i < matCloud.total(); i++ ) {
+        cloud.push_back(glm::vec2(matCloud.at<cv::Point>(int(i)).x,matCloud.at<cv::Point>(int(i)).y));
         //std::cout << "Zero#" << i << ": " << cloud.at<cv::Point>(i).x << ", " << cloud.at<cv::Point>(i).y << std::endl;
     }
 
@@ -47,3 +47,37 @@ std::vector<glm::vec2> ImageManager::getCoord(cv::Mat img){
 
     return cloud;
 }
+
+std::vector<glm::vec2> ImageManager::getCoord(std::string fileName) {
+    return getCoord(imread(fileName));
+}
+
+void ImageManager::cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img) {
+    Cloud::Box box = Cloud::getBox(cloud);
+    std::cout << "cloudToImage: "<<box.xMin<<", "<<box.xMax<<", "<<box.yMin<<", "<<box.yMax<<std::endl;
+    float tmp = std::abs(std::min(box.xMin, box.yMin));
+    box.xMin += tmp;
+    box.xMax += tmp;
+    box.yMin += tmp;
+    box.yMax += tmp;
+    std::cout << "cloudToImage: "<<box.xMin<<", "<<box.xMax<<", "<<box.yMin<<", "<<box.yMax<<std::endl;
+
+    /*cv::Mat*/ img = cv::Mat::zeros(int(box.yMax), int(box.xMax), CV_8S);
+
+    std::cout << "coucou 1" << std::endl;
+
+    for (unsigned int i = 0; i < cloud.size(); i++) {
+        int x = int(cloud[i][0]);
+        int y = int(cloud[i][1]);
+        img.at<float>(int(x+(y*box.xMax))) = 255;
+    }
+    std::cout << "coucou 2 " << img.total() << std::endl;
+
+    return;
+}
+
+
+
+
+
+
