@@ -22,6 +22,10 @@ public:
     Transforms search(std::vector<glm::vec2> &modelCloud, std::vector<glm::vec2> &imageCloud, std::vector<glm::mat3> transforms);
     Transforms search(std::vector<glm::vec2> &modelCloud, std::vector<glm::vec2> &imageCloud, std::vector<glm::mat3> transforms, float ff, float fr, float tf, float tr);
 
+private:
+    bool forwardCriterion (std::vector<glm::vec2>& modelCloud, std::vector<glm::vec2>& imageCloud, float f, float t);
+    bool reverseCriterion (std::vector<glm::vec2>& modelCloud, std::vector<glm::vec2>& imageCloud, float f, float t);
+
 };
 
 #endif // SEARCH_HPP

@@ -5,6 +5,15 @@ Search::Search() {
 }
 
 
+bool Search::forwardCriterion (std::vector<glm::vec2>& modelCloud, std::vector<glm::vec2>& imageCloud, float f, float t) {
+    return Distances::hDKth(modelCloud, imageCloud, f) < t;
+}
+
+bool Search::reverseCriterion (std::vector<glm::vec2>& modelCloud, std::vector<glm::vec2>& imageCloud, float f, float t) {
+    return Distances::hDKth(imageCloud, modelCloud, f) < t;
+}
+
+
 Transforms Search::search(std::vector<glm::vec2>& modelCloud, std::vector<glm::vec2>& imageCloud, std::vector<glm::mat3> transforms) {
     std::cout << "Starting search" << std::endl;
 
