@@ -1,0 +1,12 @@
+# Hashes of file build rules.
+53bb7f787df963f1eb5f38b2d008b096 CMakeFiles/glm
+3e0e7d71bc565489fc5dd74230def653 CMakeFiles/glm-complete
+53bb7f787df963f1eb5f38b2d008b096 CMakeFiles/glm-install
+53bb7f787df963f1eb5f38b2d008b096 CMakeFiles/glm_lib
+7aa6ce321905c01f5e128a1a4e504677 glm-prefix/src/glm-stamp/glm-build
+111adf27106d9ffa47a08b06b43c1d33 glm-prefix/src/glm-stamp/glm-configure
+bd51262dafe8167acc7f663b24f34d3c glm-prefix/src/glm-stamp/glm-download
+734bf93728fb201a3eef07b687630908 glm-prefix/src/glm-stamp/glm-install
+2bc99e062aa8e80c8921668bb9d0d72f glm-prefix/src/glm-stamp/glm-mkdir
+47299189febe6e89e73cc7dc2beee59b glm-prefix/src/glm-stamp/glm-patch
+309566621911d2dddb2229921581bdcc glm-prefix/src/glm-stamp/glm-update

@@ -2,7 +2,7 @@
 
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
-    std::string path = "../../Ressources/" + fileName;
+    std::string path = getEnvPath() + fileName;    
 
     try{
         img = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
@@ -18,7 +18,7 @@ cv::Mat ImageManager::imread(std::string fileName) {
 bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     bool res = false;
 
-    std::string path = "../../Ressources/" + fileName;
+    std::string path = getEnvPath() + fileName;
 
     try {
         res = cv::imwrite(path,img);
@@ -76,6 +76,13 @@ void ImageManager::cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img) {
     return;
 }
 
+std::string ImageManager::getEnvPath() {
+    std::string env = std::getenv("PWD");
+    
+    std::size_t pos = env.find("build");
+
+    return env.substr(0,pos) + "Ressources/";
+}
 
 
 

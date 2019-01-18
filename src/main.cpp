@@ -6,7 +6,7 @@
 #include "Search/Search.hpp"
 
 
-int main(int, char *[]) {
+int main(int, char *arg[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager();
     Raster *raster = new Raster();
@@ -25,13 +25,17 @@ int main(int, char *[]) {
     //transforms = raster->transformFilter(transforms, 252, 238, modelC);
 
 */
-//suppression
+//suppression Valérian
     cv::Size sz = img.size();
     CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
 
-    tree.displayMe();
+    cv::namedWindow("TEst");    
+    cv::imshow("Display window",img);
+    cv::waitKey(0);
 
+
+//
 /*
 
     std::cout << "is ok, press something" << std::endl;       
