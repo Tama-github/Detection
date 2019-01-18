@@ -4,6 +4,8 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <glm/glm.hpp>
+#include <Search/Search.hpp>
+#include <Cloud/cloud.hpp>
 
 class ImageManager
 {
@@ -12,6 +14,11 @@ public:
     bool imwrite(const std::string& fileName, cv::Mat img);
     // Transforme l'image en nuage de point (imread>Canny>Nuage)
     std::vector<glm::vec2> getCoord(cv::Mat img);
+    std::vector<glm::vec2> getCoord(std::string fileName);
+
+
+    // Point cloud to image
+    void cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img);
 
 };
 

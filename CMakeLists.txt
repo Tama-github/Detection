@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(Detection)
 
 
+
 # Be nice and export compile commands by default, this is handy for clang-tidy
 # and for other tools.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -17,7 +18,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Enable helpfull warnings
 #add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -Wunused -pedantic)
-add_compile_options(-Wall -Wextra -Wunused)
+add_compile_options(-Wall -Wextra -Wunused -std=c++11)
 
 set(BUILD_DIRECTORY            ${CMAKE_CURRENT_SOURCE_DIR}/build)
 # Set default install location to dist folder in build dir
