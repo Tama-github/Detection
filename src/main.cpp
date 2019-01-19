@@ -28,7 +28,7 @@ int main(int, char *[]) {
 
 //suppression Valérian
 /*    cv::Size sz = img.size();
-    CellTree tree = CellTree(0,300,0,300);
+    CellTree tree = CellTree(0,300,0,300,-1,1,-1,1,-1,1,-1,1);
     tree.subdivideCell();
     tree.displayMe();
 
