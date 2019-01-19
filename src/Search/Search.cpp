@@ -37,8 +37,9 @@ Transforms Search::search(std::vector<glm::vec2> &modelCloud, std::vector<glm::v
     std::cout << "Starting search" << std::endl;
 
     Transforms validTrans;
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (unsigned int i = 0; i < transforms.size(); i++) {
+        std::cout << "search : " << ((float)i*100/(float)(transforms.size())) << "%"<< std::endl;
         std::vector<glm::vec2> tmpModel = Cloud::transformCloud(modelCloud, transforms[i]);
         Cloud::Box box = Cloud::getBox(tmpModel);
         std::vector<glm::vec2> subImage = Cloud::getSubCloud(imageCloud, box);

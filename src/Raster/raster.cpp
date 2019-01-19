@@ -40,20 +40,24 @@ void Raster::computeTranslations(std::vector<glm::mat3>& transforms, std::vector
     //std::vector<glm::mat3> newTransforms = transforms;
     #pragma omp parallel for
     for (unsigned int t = 0; t < transforms.size(); t++) {
-        for (unsigned int i = 0; i < 50; i++) {
-            for (unsigned int j = 0; j < 50; j++) {
+        std::cout << "Raster::computeTranslations  : " << ((float)t*100/(float)(transforms.size())) << "%"<< std::endl;
+        for (unsigned int i = 0; i < xMax; i+= xMax/10) {
+            for (unsigned int j = 0; j < yMax; j+= yMax/10) {
                 glm::mat3 m = transforms[t];
                 m[0][2] += i;
                 m[1][2] += j;
                 //if(isInImage(model, xMax, yMax, m))
                   //  newTransforms.emplace_back(m);
-                //transforms.emplace_back(m);
+                #pragma omp critical
+                {
+                    transforms.emplace_back(m);
+                }
             }
         }
-        std::cout << "coucou " << (t+1)/float(transforms.size())*100 << std::endl;
+        //std::cout << "coucou " << (t+1)/float(transforms.size())*100 << std::endl;
     }
     //transforms = newTransforms;
-    return;
+    //return;
 }
 
 
@@ -80,7 +84,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
                 }
             }
         }
-        std::cout << i << "" << std::endl;
+        std::cout << "advencement[-1,1] : " << i <<  std::endl;
     }
     return res;
 }
