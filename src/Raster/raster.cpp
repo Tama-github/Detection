@@ -5,9 +5,9 @@ Raster::Raster() {
 }
 
 
-bool isInImage(std::vector<glm::vec2>& model, float xMax, float yMax, glm::mat3 transform) {
+bool isInImage(Cloud& model, float xMax, float yMax, glm::mat3 transform) {
 
-    std::vector<glm::vec2> newModel = Cloud::transformCloud(model, transform);
+    Cloud newModel = model.transformCloud(transform);
     for (unsigned int i = 0; i < newModel.size(); i++) {
         float x = newModel[i][0];
         float y = newModel[i][1];
@@ -36,12 +36,12 @@ bool Raster::isValid(float aMax, float sMax, float dMin, float dMax, glm::mat3 t
     return false;
 }
 
-void Raster::computeTranslations(std::vector<glm::mat3>& transforms, std::vector<glm::vec2>& model, float xMax, float yMax) {
+void Raster::computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax) {
     //std::vector<glm::mat3> newTransforms = transforms;
     #pragma omp parallel for
-    for (unsigned int t = 0; t < transforms.size(); t++) {
-        for (unsigned int i = 0; i < 50; i++) {
-            for (unsigned int j = 0; j < 50; j++) {
+    for (uint t = 0; t < uint(transforms.size()); t++) {
+        for (uint i = 0; i < 50; i++) {
+            for (uint j = 0; j < 50; j++) {
                 glm::mat3 m = transforms[t];
                 m[0][2] += i;
                 m[1][2] += j;
@@ -86,7 +86,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 }
 
 
-std::vector<glm::mat3> Raster::transformFilter(std::vector<glm::mat3>& transforms, float xMax, float yMax, std::vector<glm::vec2>& model) {
+std::vector<glm::mat3> Raster::transformFilter(std::vector<glm::mat3>& transforms, float xMax, float yMax, Cloud& model) {
     std::vector<glm::mat3> newTransforms;
     for (unsigned int i = 0; i < transforms.size(); i++) {
         if(isInImage(model, xMax, yMax, transforms[i]))

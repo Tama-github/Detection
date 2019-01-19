@@ -14,12 +14,12 @@ public:
     cv::Mat imread(std::string fileName);
     bool imwrite(const std::string& fileName, cv::Mat img);
     // Transforme l'image en nuage de point (imread>Canny>Nuage)
-    std::vector<glm::vec2> getCoord(cv::Mat img);
-    std::vector<glm::vec2> getCoord(std::string fileName);
+    Cloud getCoord(cv::Mat img);
+    Cloud getCoord(std::string fileName);
 
 
     // Point cloud to image
-    void cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img);
+    void cloudToImage(Cloud& cloud, cv::Mat& img);
 
 private:
     std::string getEnvPath();

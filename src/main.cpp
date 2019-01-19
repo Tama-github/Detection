@@ -11,8 +11,8 @@ int main(int, char *[]) {
     ImageManager *im = new ImageManager();
     Raster *raster = new Raster();
     Search *search = new Search();
-    std::vector<glm::vec2> modelC = im->getCoord("model.png");
-    std::vector<glm::vec2> imageC = im->getCoord("image.png");
+    Cloud modelC = im->getCoord("model.png");
+    Cloud imageC = im->getCoord("image.png");
     cv::Mat img = im->imread("image.png");
 
     cv::distanceTransform(img, img, cv::DIST_L2, 3);

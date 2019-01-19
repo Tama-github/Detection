@@ -9,6 +9,9 @@ class Cloud
 {
 public:
 
+    Cloud();
+    Cloud(std::vector<glm::vec2> &vectorPoints);
+    Cloud(Cloud& cloud);
 
     struct Box {
         float xMin;
@@ -17,14 +20,23 @@ public:
         float yMax;
     };
 
-    static Box getBox(std::vector<glm::vec2>& cloud);
+    Box getBox(std::vector<glm::vec2>& cloud);
+    Box getBox();
+    uint size();
 
-    static std::vector<glm::vec2> getSubCloud(std::vector<glm::vec2>& cloud, Box box);
+    std::vector<glm::vec2>& getVector();
 
-    static std::vector<glm::vec2> transformCloud(std::vector<glm::vec2>& cloud, glm::mat3 transform);
+    Cloud getSubCloud(Box box);
+
+    Cloud transformCloud(glm::mat3 transform);
+
+    void transform(glm::mat3 transform);
+
+    glm::vec2& operator[](uint idx);
 
 private:
-        Cloud();
+    std::vector<glm::vec2> cloud;
+    Box box;
 
 };
 
