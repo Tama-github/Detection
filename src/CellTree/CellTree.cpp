@@ -82,8 +82,13 @@ void CellTree::displayMe(){
     for(int i = 0; i < 4; i++)
     {
         std::cout << this->depth;
+        printCoordinate(this->children[i]->coord);
         this->children[i]->displayMe();
     }
     std::cout << "   " << std::endl;
     
+}
+
+void CellTree::printCoordinate(CellTree::Coordinate coord) {
+    std::cout << "(" << coord.xmin << ", " << coord.xmax << ", " << coord.ymin << ", " << coord.ymax << ")" << std::endl;
 }

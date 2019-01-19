@@ -25,6 +25,7 @@ public:
 
 private:
         Cloud();
+
 };
 
 #endif // CLOUD_HPP

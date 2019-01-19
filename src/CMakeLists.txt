@@ -42,7 +42,7 @@ add_executable(${Exe}
         ${folder_header}
         )
 
-add_dependencies(${Exe} glm_lib)
+add_dependencies(${Exe} glm_lib Ressources)
 
 target_link_libraries(${Exe} ${app_libs} ${OpenCV_LIBS} ${OpenMP_INCLUDE_DIRS})
 

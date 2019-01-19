@@ -29,6 +29,7 @@ int main(int, char *[]) {
     cv::Size sz = img.size();
     CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
+    tree.displayMe();
 
     cv::imshow("Display window",img);
     cv::waitKey(0);
