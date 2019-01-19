@@ -43,7 +43,6 @@ Cloud ImageManager::getCoord(cv::Mat img){
 
     edge.release();
     matCloud.release();
-
     return Cloud(cloud);
 }
 

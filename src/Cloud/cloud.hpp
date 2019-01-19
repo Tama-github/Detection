@@ -10,8 +10,8 @@ class Cloud
 public:
 
     Cloud();
-    Cloud(std::vector<glm::vec2> &vectorPoints);
-    Cloud(Cloud& cloud);
+    Cloud(std::vector<glm::vec2> vectorPoints);
+    Cloud(const Cloud&);
 
     struct Box {
         float xMin;

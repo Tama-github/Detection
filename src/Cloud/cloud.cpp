@@ -9,14 +9,14 @@ Cloud::Cloud() {
     box = Box{0.f, 0.f, 0.f, 0.f};
 }
 
-Cloud::Cloud(std::vector<glm::vec2> &vectorPoints) {
+Cloud::Cloud(std::vector<glm::vec2> vectorPoints) {
     cloud = vectorPoints;
     box = getBox(cloud);
 }
 
-Cloud::Cloud(Cloud& cloud) {
-    cloud = cloud.cloud;
-    box = cloud.box;
+Cloud::Cloud(const Cloud& c) {
+    cloud = c.cloud;
+    box = c.box;
 }
 
 glm::vec2& Cloud::operator[](uint idx) {
