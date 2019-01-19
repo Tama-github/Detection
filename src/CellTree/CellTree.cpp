@@ -87,3 +87,7 @@ void CellTree::displayMe(){
     std::cout << "   " << std::endl;
     
 }
+
+std::vector<CellTree> CellTree::getInterestingCells() {
+    return std::vector<CellTree>();
+}

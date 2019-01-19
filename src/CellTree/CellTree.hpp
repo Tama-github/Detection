@@ -18,6 +18,7 @@ class CellTree
         void setInterest(bool value);   
         void subdivideCell();
         void displayMe();
+        std::vector<CellTree> getInterestingCells();
 
     private:
         struct Coordinate
