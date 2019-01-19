@@ -11,6 +11,7 @@ int main(int, char *[]) {
     ImageManager *im = new ImageManager();
     Raster *raster = new Raster();
     Search *search = new Search();
+
     std::vector<glm::vec2> modelC = im->getCoord("model.png");
     std::vector<glm::vec2> imageC = im->getCoord("image_test.png");
     cv::Mat img = im->imread("image_test.png");
@@ -29,6 +30,7 @@ int main(int, char *[]) {
 /*    cv::Size sz = img.size();
     CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
+    tree.displayMe();
 
     cv::imshow("Display window",img);
     cv::waitKey(0);

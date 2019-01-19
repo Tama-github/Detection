@@ -6,17 +6,18 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <limits>
+#include "Cloud/cloud.hpp"
 
 class Distances
 {
 public:
-    static double Hf1 (std::vector<glm::vec2>& A, std::vector<glm::vec2>& B, float k);
-    static double Hf2 (std::vector<glm::vec2>& A, std::vector<glm::vec2>& B, float k);
-    static double Hf2 (std::vector<glm::vec2>& A, std::vector<glm::vec2>& B, float fr, float ff);
-    static double Hf3 (std::vector<glm::vec2>& A, std::vector<glm::vec2>& B, float k);
-    static double Hf4 (std::vector<glm::vec2>& A, std::vector<glm::vec2>& B, float k);
+    static double Hf1 (Cloud& A, Cloud& B, float k);
+    static double Hf2 (Cloud& A, Cloud& B, float k);
+    static double Hf2 (Cloud& A, Cloud& B, float fr, float ff);
+    static double Hf3 (Cloud& A, Cloud& B, float k);
+    static double Hf4 (Cloud& A, Cloud& B, float k);
 
-    static double hDKth(std::vector<glm::vec2> &A, std::vector<glm::vec2> &B, float k);
+    static double hDKth(Cloud &A, Cloud &B, float k);
 
    // static double probe (std::vector<glm::vec2>& A, )
 

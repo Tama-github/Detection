@@ -18,6 +18,7 @@ class CellTree
         void setInterest(bool value);   
         void subdivideCell();
         void displayMe();
+        std::vector<CellTree> getInterestingCells();
 
     private:
         struct Coordinate
@@ -33,6 +34,8 @@ class CellTree
         CellTree * parent;        
         CellTree * children [4] = {nullptr,nullptr,nullptr,nullptr};
         Coordinate coord;
+
+        void printCoordinate(Coordinate coord);
 };
 
 #endif //CELLTREE_HPP

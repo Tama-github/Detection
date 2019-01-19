@@ -53,21 +53,21 @@ void CellTree::subdivideCell(){
         return;
     }
     
-    int mid_x = this->coord.xmax - this->coord.xmin;
-    int mid_y = this->coord.ymax - this->coord.ymin;
+    int mid_x = (this->coord.xmax - this->coord.xmin)/2;
+    int mid_y = (this->coord.ymax - this->coord.ymin)/2;
 
     for(int i = 0; i < 2; i++)
     {
         int x_min = this->coord.xmin + i * mid_x;
-        int x_max = this->coord.xmax - i * mid_x;
+        int x_max = this->coord.xmax - (1-i) * mid_x;
         
         for(int j = 0; j < 2; j++)
         {
             int y_min = this->coord.xmin + j * mid_y;
-            int y_max = this->coord.xmin - j * mid_y;
+            int y_max = this->coord.ymax - (1-j) * mid_y;
 
-            this->children[i*2 + j] = new CellTree(x_min, x_max, y_min, y_max, this);
-            this->children[i*2 + j]->subdivideCell();
+            this->children[i + j*2] = new CellTree(x_min, x_max, y_min, y_max, this);
+            this->children[i + j*2]->subdivideCell();
         }        
     }    
 }
@@ -78,12 +78,20 @@ void CellTree::displayMe(){
     {
         return;
     }
+    std::cout << this->depth;
+    printCoordinate(this->coord);
     
     for(int i = 0; i < 4; i++)
-    {
-        std::cout << this->depth;
+    {        
         this->children[i]->displayMe();
     }
     std::cout << "   " << std::endl;
     
+}
+
+std::vector<CellTree> CellTree::getInterestingCells() {
+    return std::vector<CellTree>();
+}
+void CellTree::printCoordinate(CellTree::Coordinate coord) {
+    std::cout << "(" << coord.xmin << ", " << coord.xmax << ", " << coord.ymin << ", " << coord.ymax << ")" << std::endl;
 }

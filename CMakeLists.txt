@@ -35,6 +35,15 @@ set(LIBRARY_OUTPUT_PATH              ${BIN_DIRECTORY}/lib)
 
 set(SRC_DIR                    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+################################################################################
+# Symbolic link to ressources
+set(RESSOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+# when building, just link Assets to build dir /assets
+add_custom_target(Ressources
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${RESSOURCES_DIR}/Ressources" "${BUILD_DIRECTORY}/Ressources"
+        COMMENT "Linking (symlink) assets and other ressources" VERBATIM
+        )
+
 
 ################################################################################
 # Build submodule

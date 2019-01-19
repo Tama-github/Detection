@@ -2,10 +2,9 @@
 
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
-    std::string path = getEnvPath() + fileName;    
 
     try{
-        img = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
+        img = cv::imread("../Ressources/"+fileName, CV_LOAD_IMAGE_GRAYSCALE);
         if(!img.data)
             throw std::invalid_argument("File not found or not supported");
     } catch (std::exception& ex) {
@@ -29,7 +28,7 @@ bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     return res;
 }
 
-std::vector<glm::vec2> ImageManager::getCoord(cv::Mat img){
+Cloud ImageManager::getCoord(cv::Mat img){
     cv::Mat edge,matCloud;
     cv::Canny(img,edge,50,150);
 
@@ -45,15 +44,16 @@ std::vector<glm::vec2> ImageManager::getCoord(cv::Mat img){
     edge.release();
     matCloud.release();
 
-    return cloud;
+    return Cloud(cloud);
 }
 
-std::vector<glm::vec2> ImageManager::getCoord(std::string fileName) {
+Cloud ImageManager::getCoord(std::string fileName) {
     return getCoord(imread(fileName));
 }
 
-void ImageManager::cloudToImage(std::vector<glm::vec2>& cloud, cv::Mat& img) {
-    Cloud::Box box = Cloud::getBox(cloud);
+//In work in progress
+void ImageManager::cloudToImage(Cloud& cloud, cv::Mat& img) {
+    Cloud::Box box = cloud.getBox();
     std::cout << "cloudToImage: "<<box.xMin<<", "<<box.xMax<<", "<<box.yMin<<", "<<box.yMax<<std::endl;
     float tmp = std::abs(std::min(box.xMin, box.yMin));
     box.xMin += tmp;
