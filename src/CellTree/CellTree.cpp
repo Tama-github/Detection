@@ -7,7 +7,7 @@ CellTree::CellTree(int xmin, int xmax, int ymin, int ymax, CellTree * parent ){
     this->coord.ymin = ymin;
     this->coord.ymax = ymax;
 
-    this->isInteresting = false;
+    this->isInteresting = true;
     
     if (parent) {
         this->parent = parent;
@@ -90,8 +90,30 @@ void CellTree::displayMe(){
 }
 
 std::vector<CellTree> CellTree::getInterestingCells() {
-    return std::vector<CellTree>();
+    std::vector<CellTree> list;
+   
+    recursiveInterestingCells(&list);
+
+    return list;
 }
+
+void CellTree::recursiveInterestingCells(std::vector<CellTree> * list) {    
+    
+    if (this->isInteresting) 
+    {
+        list->push_back(*this);
+    }
+
+    if(this->children[0] != nullptr)
+    {
+        for(size_t i = 0; i < 4; i++)
+        {
+            this->children[i]->recursiveInterestingCells(list);
+        }            
+    }
+}
+
+
 void CellTree::printCoordinate(CellTree::Coordinate coord) {
     std::cout << "(" << coord.xmin << ", " << coord.xmax << ", " << coord.ymin << ", " << coord.ymax << ")" << std::endl;
 }

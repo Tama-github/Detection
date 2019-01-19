@@ -35,6 +35,7 @@ class CellTree
         CellTree * children [4] = {nullptr,nullptr,nullptr,nullptr};
         Coordinate coord;
 
+        void recursiveInterestingCells(std::vector<CellTree> * list);
         void printCoordinate(Coordinate coord);
 };
 
