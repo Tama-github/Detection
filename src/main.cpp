@@ -6,7 +6,7 @@
 #include "Search/Search.hpp"
 
 
-int main(int, char *arg[]) {
+int main(int, char *[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager();
     Raster *raster = new Raster();
@@ -30,7 +30,6 @@ int main(int, char *arg[]) {
     CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
 
-    cv::namedWindow("TEst");    
     cv::imshow("Display window",img);
     cv::waitKey(0);
 
