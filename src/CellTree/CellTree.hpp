@@ -34,6 +34,8 @@ class CellTree
         CellTree * parent;        
         CellTree * children [4] = {nullptr,nullptr,nullptr,nullptr};
         Coordinate coord;
+
+        void printCoordinate(Coordinate coord);
 };
 
 #endif //CELLTREE_HPP

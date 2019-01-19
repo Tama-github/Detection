@@ -2,10 +2,9 @@
 
 cv::Mat ImageManager::imread(std::string fileName) {
     cv::Mat img;
-    std::string path = getEnvPath() + fileName;    
 
     try{
-        img = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
+        img = cv::imread("../Ressources/"+fileName, CV_LOAD_IMAGE_GRAYSCALE);
         if(!img.data)
             throw std::invalid_argument("File not found or not supported");
     } catch (std::exception& ex) {
