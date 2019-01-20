@@ -20,6 +20,10 @@ CellTree::CellTree(float xmin, float xmax, float ymin, float ymax, float a00min,
     i4 = ii4;
     i5 = ii5;
     i6 = ii6;
+
+    w = (a00max/i1-a00min/i1)+(a01max/i2-a01min/i2)+(xmax/i5-xmin/i5);
+    h = (a10max/i3-a10min/i3)+(a11max/i4-a11min/i4)+(ymax/i6-ymin/i6);
+
     hasChild = false;
 
     this->isInteresting = false;
@@ -61,6 +65,21 @@ bool CellTree::getInterest(){
 
 void CellTree::setInterest(bool value){
     this->isInteresting = value;
+}
+
+bool CellTree::hasOneElem() {
+    return h == 0 && w == 0;
+}
+
+glm::mat3 CellTree::getTransform() {
+    glm::mat3 res = glm::mat3(0);
+    res[0][0] = coord.a00max;
+    res[0][1] = coord.a01max;
+    res[1][0] = coord.a10max;
+    res[1][1] = coord.a11max;
+    res[0][2] = coord.xmax;
+    res[1][2] = coord.ymax;
+    return res;
 }
 
 void CellTree::subdivideCell(){    

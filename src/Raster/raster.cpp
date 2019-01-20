@@ -98,7 +98,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     float xSize = 2.f/i1;
     float ySize = 2.f/i2;
 
-    std::cout << "Before the clamping " << std::endl;
+    /*std::cout << "Before the clamping " << std::endl;
     std::cout << "xMax = " << xMax << std::endl;
     std::cout << "yMax = " << yMax << std::endl;
     std::cout << "i1|i3 = " << i1 << std::endl;
@@ -107,7 +107,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     std::cout << "taille de la  cellule sur i1|i3 = " << xSize << std::endl;
     std::cout << "taille de la  cellule sur i2|i4 = " << ySize << std::endl;
     std::cout << "taille de la  cellule sur i5 = " << xMax << std::endl;
-    std::cout << "taille de la  cellule sur i6 = " << yMax << std::endl;
+    std::cout << "taille de la  cellule sur i6 = " << yMax << std::endl;*/
 
     xSize = clamp2N(xSize);
     ySize = clamp2N(ySize);
@@ -121,7 +121,8 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     th1 = th3 = (xSize * i1);
     th2 = th4 = (ySize * i2);
     th5 = th6 = xMax;
-    std::cout << "After the clamping " << std::endl;
+
+    /*std::cout << "After the clamping " << std::endl;
 
     std::cout << "th1|th3 = " << th1 << std::endl;
     std::cout << "th2|th4 = " << th2 << std::endl;
@@ -131,9 +132,11 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     std::cout << "taille de la  cellule sur th1|th3 = " << th1/i1 << std::endl;
     std::cout << "taille de la  cellule sur th2|th4 = " << th2/i2 << std::endl;
     std::cout << "taille de la  cellule sur th5 = " << th5 << std::endl;
-    std::cout << "taille de la  cellule sur th6 = " << th6 << std::endl;
+    std::cout << "taille de la  cellule sur th6 = " << th6 << std::endl;*/
 
     CellTree tree = CellTree(tl5, th5, tl6, th6, tl1, th1, tl2, th2, tl3, th3, tl4, th4, i1, i2, i3, i4, i5, i6);
+
+    //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
 
     tree.subdivideCell();
     tree.displayMe();
@@ -142,14 +145,19 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     for (int i = 0; i < cells.size(); i++) {
         std::cout << "(c'est le lol pourcentage) " << ((float)i*100/(float)(cells.size())) << "%" << std::endl;
         CellTree* currentCell = cells[i];
-        /*if (La cellule est interressante) {
-            std::vector<CellTree*> tmp = currentCell->getChilds();
-            cells.erase(cells.begin());
-            cells.insert(cells.begin(),tmp.begin(),tmp.end());
-            i--;
-        } else if (La cellule n'est pas intéressante) {
-            cells.erase(cells.begin());
-        }*/
+        if (currentCell->hasOneElem()) {
+            glm::mat3 matrix = currentCell->getTransform();
+            //if (Le revers criterion est vérifié) res.emplace_back(currentCell.getTransform());
+        } else {
+            /*if (La cellule est interressante) {
+                std::vector<CellTree*> tmp = currentCell->getChilds();
+                cells.erase(cells.begin());
+                cells.insert(cells.begin(),tmp.begin(),tmp.end());
+                i--;
+            } else if (La cellule n'est pas intéressante) {
+                cells.erase(cells.begin());
+            }*/
+        }
     }
 
     return res;

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
 
 #define MAX_DEPTH 6
 #define CHILDREN_NUMBER 64
@@ -21,6 +22,10 @@ class CellTree
         void subdivideCell();
         void displayMe();
         std::vector<CellTree> getInterestingCells();
+        bool hasOneElem();
+        glm::mat3 getTransform();
+
+
 
     private:
         struct Coordinate
@@ -50,6 +55,8 @@ class CellTree
         float i4;
         float i5;
         float i6;
+        float w;
+        float h;
         void recursiveInterestingCells(std::vector<CellTree> * list);
         void printCoordinate();
 };
