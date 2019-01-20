@@ -20,10 +20,13 @@ int main(int, char *[]) {
     cv::normalize(img, img, 0, 255.0, cv::NORM_MINMAX);
     im->imwrite("distanceTransform.png", img);
 
-    std::vector<glm::mat3> transforms = raster->genTransformations(80, 80, 2.f, 0.4f, 0.3f, 1.f);
-    raster->computeTranslations(transforms, modelC, img.cols, img.rows);
+    float xMax = (float)img.cols;
+    float yMax = (float)img.rows;
+
+    std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, 2.f, 0.4f, 0.3f, 1.f);
+    /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
-    transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);
+    transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/
 
 
 //suppression Valérian
@@ -53,12 +56,12 @@ int main(int, char *[]) {
         //std::cout << "blabla3" << std::endl;
     }*/
 
-    float ff = 1.f;
+    /*float ff = 1.f;
     float fr = 0.8f;
     float tf = 2*std::sqrt(2);
     float tr = 2*std::sqrt(2);
 
-    search->search(modelC, imageC, transforms, ff, fr, tf, tr);
+    search->search(modelC, imageC, transforms, ff, fr, tf, tr);*/
 
     delete im;
     delete raster;

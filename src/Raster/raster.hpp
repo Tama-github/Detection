@@ -6,6 +6,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <Cloud/cloud.hpp>
+#include <CellTree/CellTree.hpp>
 
 class Raster
 {
@@ -17,6 +18,9 @@ public:
 
     std::vector<glm::mat3> transformFilter(std::vector<glm::mat3>& transforms, float xMax, float yMax, Cloud& model);
     void computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax);
+
+private:
+    float clamp2N(float X);
 
 };
 

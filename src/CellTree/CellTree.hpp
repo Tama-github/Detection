@@ -11,7 +11,7 @@
 class CellTree
 {    
     public:
-        CellTree(int xmin, int xmax, int ymin, int ymax, float a00min, float a00max, float a01min, float a01max, float a10min, float a10max,float a11min, float a11max, CellTree * parent = nullptr) ;
+        CellTree(float xmin, float xmax, float ymin, float ymax, float a00min, float a00max, float a01min, float a01max, float a10min, float a10max,float a11min, float a11max, float ii1, float ii2, float ii3, float ii4, float ii5, float ii6,  CellTree * parent = nullptr) ;
         ~CellTree();
         CellTree * getParent();
         CellTree * getChild(int number);
@@ -33,20 +33,25 @@ class CellTree
             float a10max;
             float a11min;
             float a11max;
-            int xmin;
-            int xmax;
-            int ymin;
-            int ymax;
+            float xmin;
+            float xmax;
+            float ymin;
+            float ymax;
         };
-        
+        bool hasChild;
         bool isInteresting;
         int depth;
         CellTree * parent;        
         CellTree * children [CHILDREN_NUMBER] = {};
         Coordinate coord;
-
+        float i1;
+        float i2;
+        float i3;
+        float i4;
+        float i5;
+        float i6;
         void recursiveInterestingCells(std::vector<CellTree> * list);
-        void printCoordinate(Coordinate coord);
+        void printCoordinate();
 };
 
 #endif //CELLTREE_HPP
