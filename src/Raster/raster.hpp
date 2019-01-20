@@ -26,6 +26,7 @@ private:
     float clamp2N(float X);
     bool forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
     bool reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
+    bool isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h);
 
     Cloud& model;
     Cloud& image;

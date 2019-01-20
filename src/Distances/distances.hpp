@@ -26,6 +26,8 @@ public:
     static double deltap(Cloud& model, Cloud& image, float x, float y, float w, float h);
 
     static double f(Cloud& model, Cloud& image, double thau);
+    static double fp(Cloud& model, Cloud& image, double thau, float w, float h);
+
    // static double probe (std::vector<glm::vec2>& A, )
 
 private:

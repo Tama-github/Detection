@@ -124,6 +124,9 @@ bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
     //return Distances::hDKth(imageCloud, modelCloud, f) < t;
 }
 
+bool Raster::isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h) {
+    return Distances::fp(modelCloud, imageCloud, (double)t, w, h) >= (double)f;
+}
 
 std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
     std::cout << "Starting transform compute" << std::endl;
@@ -201,20 +204,22 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
         if (currentCell->hasOneElem()) {
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
-            //if (Le revers criterion est vérifié) res.emplace_back(currentCell.getTransform());
             Cloud subImage = image.getSubCloud(transformModel.getBox());
             if (reverseCriterion(transformModel, subImage, fr, tr)) {
                 res.emplace_back(matrix);
             }
         } else {
-            /*if (La cellule est interressante) {
+            glm::mat3 matrix = currentCell->getTransformTL();
+            Cloud transformModel = model.transformCloud(matrix);
+            Cloud subImage = image.getSubCloud(transformModel.getBox());
+            if (isCellInteresting(transformModel, subImage, ff, tf, currentCell->w, currentCell->h)) {
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
                 cells.insert(cells.begin(),tmp.begin(),tmp.end());
-                i--;
-            } else if (La cellule n'est pas intéressante) {
+            } else {
                 cells.erase(cells.begin());
-            }*/
+            }
+            i--;
         }
     }
 

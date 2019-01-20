@@ -105,3 +105,16 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
     }
     return cpt/cardM;
 }
+
+double Distances::fp(Cloud& model, Cloud& image, double thau, float w, float h) {
+    if (model.size() == 0 || image.size() == 0)
+        return std::numeric_limits<uint>::max();
+
+    uint cardM = model.size();
+    uint cpt = 0;
+    for (uint i = 0; i < cardM; i++) {
+        if (deltap(model, image, model[i][0], model[i][1], w, h) <= thau)
+            cpt++;
+    }
+    return cpt/cardM;
+}
