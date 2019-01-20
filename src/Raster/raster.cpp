@@ -186,7 +186,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
         std::cout << "(c'est le lol pourcentage) " << ((float)i*100/(float)(cells.size())) << "%" << std::endl;
         CellTree* currentCell = cells[i];
         if (currentCell->hasOneElem()) {
-            glm::mat3 matrix = currentCell->getTransform();
+            glm::mat3 matrix = currentCell->getTransformTL();
             //if (Le revers criterion est vérifié) res.emplace_back(currentCell.getTransform());
         } else {
             /*if (La cellule est interressante) {

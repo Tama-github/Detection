@@ -23,7 +23,7 @@ class CellTree
         void displayMe();
         std::vector<CellTree> getInterestingCells();
         bool hasOneElem();
-        glm::mat3 getTransform();
+        glm::mat3 getTransformTL();
 
 
 

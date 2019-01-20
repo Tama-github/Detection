@@ -71,14 +71,14 @@ bool CellTree::hasOneElem() {
     return h == 0 && w == 0;
 }
 
-glm::mat3 CellTree::getTransform() {
+glm::mat3 CellTree::getTransformTL() {
     glm::mat3 res = glm::mat3(0);
-    res[0][0] = coord.a00max;
-    res[0][1] = coord.a01max;
-    res[1][0] = coord.a10max;
-    res[1][1] = coord.a11max;
-    res[0][2] = coord.xmax;
-    res[1][2] = coord.ymax;
+    res[0][0] = coord.a00min;
+    res[0][1] = coord.a01min;
+    res[1][0] = coord.a10min;
+    res[1][1] = coord.a11min;
+    res[0][2] = coord.xmin;
+    res[1][2] = coord.ymin;
     return res;
 }
 
