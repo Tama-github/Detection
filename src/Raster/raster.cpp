@@ -1,6 +1,6 @@
 #include "raster.hpp"
 
-Raster::Raster() {
+Raster::Raster(Cloud& _model, Cloud& _image) : model{_model}, image{_image} {
 
 }
 
@@ -112,7 +112,20 @@ float Raster::clamp2N(float X) {
     return -1;
 }
 
-std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax) {
+
+
+bool Raster::forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
+    return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
+    //return Distances::hDKth(modelCloud, imageCloud, f) < t;
+}
+
+bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
+    return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
+    //return Distances::hDKth(imageCloud, modelCloud, f) < t;
+}
+
+
+std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
     std::cout << "Starting transform compute" << std::endl;
     std::vector<glm::mat3> res = {};
     // Definition of the unitary displacement on each dimension of the trasformation space.
@@ -187,7 +200,12 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
         CellTree* currentCell = cells[i];
         if (currentCell->hasOneElem()) {
             glm::mat3 matrix = currentCell->getTransform();
+            Cloud transformModel = model.transformCloud(matrix);
             //if (Le revers criterion est vérifié) res.emplace_back(currentCell.getTransform());
+            Cloud subImage = image.getSubCloud(transformModel.getBox());
+            if (reverseCriterion(transformModel, subImage, fr, tr)) {
+                res.emplace_back(matrix);
+            }
         } else {
             /*if (La cellule est interressante) {
                 std::vector<CellTree*> tmp = currentCell->getChilds();
