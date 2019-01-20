@@ -61,6 +61,17 @@ double Distances::delta(Cloud &model, Cloud &image, uint ind) {
     return distMin;
 }
 
+double Distances::delta(float x, float y, Cloud &image) {
+    double distMin = std::numeric_limits<double>::max();
+    for (uint i = 0; i < image.size(); i++) {
+        double dist = double(glm::length(glm::vec2(x, y) - image[i]));
+        if (distMin > dist)
+            distMin = dist;
+    }
+    return distMin;
+}
+
+
 
 uint findInd(Cloud& cloud, float x, float y) {
     float epsX = 1.f/cloud.getBox().xMax;
@@ -77,7 +88,7 @@ uint findInd(Cloud& cloud, float x, float y) {
 }
 
 double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, float h) {
-    double minDist = std::numeric_limits<double>::max();
+    /*double minDist = std::numeric_limits<double>::max();
     for (float i = x; i <= x+w; i++) {
         for (float j = y; j <= x+h; j++) {
             uint ind = findInd(model, i, j);
@@ -90,7 +101,18 @@ double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, 
                 minDist = dist;
         }
     }
-    return minDist;
+    return minDist;*/
+    double minDist = std::numeric_limits<double>::max();
+        for (float i = x; i <= x+w; i++) {
+            for (float j = y; j <= x+h; j++) {
+                double dist = minDist = std::numeric_limits<double>::max();
+                if (i <= model.getBox().xMax && j <= model.getBox().yMax)
+                    dist = delta(i, j, image);
+                if (minDist > dist)
+                    minDist = dist;
+            }
+        }
+        return minDist;
 }
 
 double Distances::f(Cloud& model, Cloud& image, double thau) {
@@ -103,7 +125,7 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
         if (delta(model, image, i) <= thau)
             cpt++;
     }
-    return cpt/cardM;
+    return double(cpt)/double(cardM);
 }
 
 double Distances::fp(Cloud& model, Cloud& image, double thau, float w, float h) {
@@ -112,9 +134,21 @@ double Distances::fp(Cloud& model, Cloud& image, double thau, float w, float h) 
 
     uint cardM = model.size();
     uint cpt = 0;
+    #pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
-        if (deltap(model, image, model[i][0], model[i][1], w, h) <= thau)
+        if (deltap(model, image, model[i][0], model[i][1], w, h) <= thau) {
+            #pragma omp atomic
             cpt++;
+        }
     }
-    return cpt/cardM;
+    return double(cpt)/double(cardM);
 }
+
+
+
+
+
+
+
+
+

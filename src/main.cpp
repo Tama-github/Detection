@@ -31,6 +31,7 @@ int main(int, char *[]) {
     float yMax = float(img.rows);
 
     std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
+    std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/

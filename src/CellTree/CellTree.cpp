@@ -44,13 +44,11 @@ CellTree * CellTree::getParent(){
     return this->parent;
 }
 
-CellTree * CellTree::getChild(int number){
+CellTree * CellTree::getChild(uint number){
     
-    if (number < 0) {
-        throw "Position of child must be positive";
-    } else if (number > 3) {
+    if (number > 63) {
         throw "Position of child must be under 4";
-    }    
+    }
 
     return this->children[number];
 }
@@ -68,7 +66,7 @@ void CellTree::setInterest(bool value){
 }
 
 bool CellTree::hasOneElem() {
-    return h == 0 && w == 0;
+    return h == 0.f && w == 0.f;
 }
 
 glm::mat3 CellTree::getTransformTL() {
@@ -79,6 +77,7 @@ glm::mat3 CellTree::getTransformTL() {
     res[1][1] = coord.a11min;
     res[0][2] = coord.xmin;
     res[1][2] = coord.ymin;
+    res[2][2] = 1.f;
     return res;
 }
 
@@ -87,12 +86,12 @@ void CellTree::subdivideCell(){
         return;
     }*/
     hasChild = true;
-    float mid_x = (float)((float)this->coord.xmax + (float)this->coord.xmin)/(float)R;
-    float mid_y = (float)((float)this->coord.ymax + (float)this->coord.ymin)/(float)R;
-    float mid_a00 = (float)((float)this->coord.a00max + (float)this->coord.a00max)/(float)R;
-    float mid_a01 = (float)((float)this->coord.a01max + (float)this->coord.a01max)/(float)R;
-    float mid_a10 = (float)((float)this->coord.a10max + (float)this->coord.a10max)/(float)R;
-    float mid_a11 = (float)((float)this->coord.a11max + (float)this->coord.a11max)/(float)R;
+    float mid_x = float(float(this->coord.xmax) + float(this->coord.xmin))/float(R);
+    float mid_y = float(float(this->coord.ymax) + float(this->coord.ymin))/float(R);
+    float mid_a00 = float(float(this->coord.a00max) + float(this->coord.a00max))/float(R);
+    float mid_a01 = float(float(this->coord.a01max) + float(this->coord.a01max))/float(R);
+    float mid_a10 = float(float(this->coord.a10max) + float(this->coord.a10max))/float(R);
+    float mid_a11 = float(float(this->coord.a11max) + float(this->coord.a11max))/float(R);
 
     std::cout << "mid_x = " << mid_x << std::endl;
     std::cout << "mid_y = " << mid_y << std::endl;
@@ -162,7 +161,7 @@ void CellTree::displayMe(){
     if (!hasChild) return;
 
     std::cout << "My children :" << std::endl;
-    for(int i = 0; i < CHILDREN_NUMBER; i++)
+    for(uint i = 0; i < CHILDREN_NUMBER; i++)
     {
         this->children[i]->printCoordinate();
     }

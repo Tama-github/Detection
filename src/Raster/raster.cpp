@@ -125,7 +125,7 @@ bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
 }
 
 bool Raster::isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h) {
-    return Distances::fp(modelCloud, imageCloud, (double)t, w, h) >= (double)f;
+    return Distances::fp(modelCloud, imageCloud, double(t), w, h) >= double(f);
 }
 
 std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
@@ -198,25 +198,40 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     tree.displayMe();
 
     std::vector<CellTree*> cells = tree.getChilds();
-    for (int i = 0; i < cells.size(); i++) {
-        std::cout << "(c'est le lol pourcentage) " << ((float)i*100/(float)(cells.size())) << "%" << std::endl;
+    for (uint i = 0; i < cells.size(); i++) {
+        std::cout << "(c'est le lol pourcentage) " << (float(i)*100.f/float(cells.size())) << "%" << std::endl;
         CellTree* currentCell = cells[i];
+        std::cout << "coucou 1 " << std::endl;
         if (currentCell->hasOneElem()) {
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
             Cloud subImage = image.getSubCloud(transformModel.getBox());
-            if (reverseCriterion(transformModel, subImage, fr, tr)) {
+            if (reverseCriterion(transformModel, subImage, fr, tr))
                 res.emplace_back(matrix);
-            }
+            std::cout << "coucou 2 " << std::endl;
+
         } else {
+            std::cout << "coucou 3 " << std::endl;
+
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
             Cloud subImage = image.getSubCloud(transformModel.getBox());
-            if (isCellInteresting(transformModel, subImage, ff, tf, currentCell->w, currentCell->h)) {
+            std::cout << "w et h : " << currentCell->w << ", " << currentCell->h << std::endl;
+            std::cout << "juste avant intersting" << std::endl;
+            std::cout << "tailles de model & subImage : " << transformModel.size() << ", " << subImage.size() << std::endl;
+
+            bool isInteresting = isCellInteresting(transformModel, subImage, ff, tf, currentCell->w, currentCell->h);
+            std::cout << "coucou intersting : " << isInteresting << std::endl;
+
+            if (isInteresting) {
+                std::cout << "coucou 4 " << std::endl;
+
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
-                cells.insert(cells.begin(),tmp.begin(),tmp.end());
+                cells.insert(cells.begin(), tmp.begin(), tmp.end());
             } else {
+                std::cout << "coucou 5 " << std::endl;
+
                 cells.erase(cells.begin());
             }
             i--;

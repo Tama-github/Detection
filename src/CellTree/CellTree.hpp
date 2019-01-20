@@ -15,7 +15,7 @@ class CellTree
         CellTree(float xmin, float xmax, float ymin, float ymax, float a00min, float a00max, float a01min, float a01max, float a10min, float a10max,float a11min, float a11max, float ii1, float ii2, float ii3, float ii4, float ii5, float ii6,  CellTree * parent = nullptr) ;
         ~CellTree();
         CellTree * getParent();
-        CellTree * getChild(int number);
+        CellTree * getChild(uint number);
         std::vector<CellTree*> getChilds();
         bool getInterest();
         void setInterest(bool value);   
