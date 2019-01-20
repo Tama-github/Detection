@@ -18,7 +18,7 @@ int main(int, char *[]) {
 
     cv::distanceTransform(img, img, cv::DIST_L2, 3);
     cv::normalize(img, img, 0, 255.0, cv::NORM_MINMAX);
-    im->imwrite("distanceTransform.png", img);
+    //im->imwrite("distanceTransform.png", img);
 
     float xMax = (float)img.cols;
     float yMax = (float)img.rows;

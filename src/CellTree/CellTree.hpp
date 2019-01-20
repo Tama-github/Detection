@@ -6,7 +6,7 @@
 
 #define MAX_DEPTH 6
 #define CHILDREN_NUMBER 64
-#define R 2
+#define R 2.f
 
 class CellTree
 {    
@@ -15,7 +15,7 @@ class CellTree
         ~CellTree();
         CellTree * getParent();
         CellTree * getChild(int number);
-        CellTree ** getChilds();
+        std::vector<CellTree*> getChilds();
         bool getInterest();
         void setInterest(bool value);   
         void subdivideCell();
@@ -42,7 +42,7 @@ class CellTree
         bool isInteresting;
         int depth;
         CellTree * parent;        
-        CellTree * children [CHILDREN_NUMBER] = {};
+        std::vector<CellTree*> children;
         Coordinate coord;
         float i1;
         float i2;

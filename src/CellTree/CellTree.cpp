@@ -51,7 +51,7 @@ CellTree * CellTree::getChild(int number){
     return this->children[number];
 }
 
-CellTree ** CellTree::getChilds(){
+std::vector<CellTree*> CellTree::getChilds(){
     return this->children;
 }
 
@@ -68,47 +68,53 @@ void CellTree::subdivideCell(){
         return;
     }*/
     hasChild = true;
-    float mid_x = (this->coord.xmax - this->coord.xmin)/R;
-    float mid_y = (this->coord.ymax - this->coord.ymin)/R;
-    float mid_a00 = (this->coord.a00max - this->coord.a00max)/R;
-    float mid_a01 = (this->coord.a01max - this->coord.a01max)/R;
-    float mid_a10 = (this->coord.a10max - this->coord.a10max)/R;
-    float mid_a11 = (this->coord.a11max - this->coord.a11max)/R;
+    float mid_x = (float)((float)this->coord.xmax + (float)this->coord.xmin)/(float)R;
+    float mid_y = (float)((float)this->coord.ymax + (float)this->coord.ymin)/(float)R;
+    float mid_a00 = (float)((float)this->coord.a00max + (float)this->coord.a00max)/(float)R;
+    float mid_a01 = (float)((float)this->coord.a01max + (float)this->coord.a01max)/(float)R;
+    float mid_a10 = (float)((float)this->coord.a10max + (float)this->coord.a10max)/(float)R;
+    float mid_a11 = (float)((float)this->coord.a11max + (float)this->coord.a11max)/(float)R;
 
-    for(int i = 0; i < R; i++)
+    std::cout << "mid_x = " << mid_x << std::endl;
+    std::cout << "mid_y = " << mid_y << std::endl;
+    std::cout << "mid_a00 = " << mid_a00 << std::endl;
+    std::cout << "mid_a01 = " << mid_a01 << std::endl;
+    std::cout << "mid_a10 = " << mid_a10 << std::endl;
+    std::cout << "mid_a11 = " << mid_a11 << std::endl;
+
+    for(float i = 0; i < R; i++)
     {
-        int x_min = this->coord.xmin + i * mid_x;
-        int x_max = this->coord.xmax - (1-i) * mid_x;
+        float x_min = this->coord.xmin + i * mid_x;
+        float x_max = this->coord.xmax - (1.f-i) * mid_x;
         
-        for(int j = 0; j < R; j++)
+        for(float j = 0; j < R; j++)
         {
-            int y_min = this->coord.xmin + j * mid_y;
-            int y_max = this->coord.ymax - (1-j) * mid_y;
+            float y_min = this->coord.ymin + j * mid_y;
+            float y_max = this->coord.ymax - (1.f-j) * mid_y;
 
-            for(int u = 0; u < R; u++)
+            for(float u = 0; u < R; u++)
             {
                 float a00_min = this->coord.a00min + u * mid_a00;
-                float a00_max = this->coord.a00max - (1-u) * mid_a00;
+                float a00_max = this->coord.a00max - (1.f-u) * mid_a00;
                 
-                for(int v = 0; v < R; v++)
+                for(float v = 0; v < R; v++)
                 {
                     float a01_min = this->coord.a01min + v * mid_a01;
-                    float a01_max = this->coord.a01max - (1-v) * mid_a01;
+                    float a01_max = this->coord.a01max - (1.f-v) * mid_a01;
                     
-                    for(int m = 0; m < R; m++)
+                    for(float m = 0; m < R; m++)
                     {
                         float a10_min = this->coord.a10min + m * mid_a10;
-                        float a10_max = this->coord.a10max - (1-m) * mid_a10;
+                        float a10_max = this->coord.a10max - (1.f-m) * mid_a10;
                         
-                        for(int n = 0; n < R; n++)
+                        for(float n = 0; n < R; n++)
                         {
                             float a11_min = this->coord.a11min + n * mid_a11;
-                            float a11_max = this->coord.a11max - (1-n) * mid_a11;
+                            float a11_max = this->coord.a11max - (1.f-n) * mid_a11;
                             
-                            this->children[i+j*2+u*4+v*8+m*16+n*32] = new CellTree(x_min, x_max, y_min, y_max, a00_min,a00_max,a01_min,a01_max,a10_min,a10_max,a11_min,a11_max,i1,i2,i3,i4,i5,i6, this);
+                            this->children.emplace_back(new CellTree(x_min, x_max, y_min, y_max, a00_min,a00_max,a01_min,a01_max,a10_min,a10_max,a11_min,a11_max,i1,i2,i3,i4,i5,i6, this));
                         }
                     }
-
                 }
             }
         }        

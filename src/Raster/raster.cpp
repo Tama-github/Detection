@@ -138,6 +138,19 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     tree.subdivideCell();
     tree.displayMe();
 
+    std::vector<CellTree*> cells = tree.getChilds();
+    for (int i = 0; i < cells.size(); i++) {
+        std::cout << "(c'est le lol pourcentage) " << ((float)i*100/(float)(cells.size())) << "%" << std::endl;
+        CellTree* currentCell = cells[i];
+        /*if (La cellule est interressante) {
+            std::vector<CellTree*> tmp = currentCell->getChilds();
+            cells.erase(cells.begin());
+            cells.insert(cells.begin(),tmp.begin(),tmp.end());
+            i--;
+        } else if (La cellule n'est pas intéressante) {
+            cells.erase(cells.begin());
+        }*/
+    }
 
     return res;
 }
