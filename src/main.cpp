@@ -9,26 +9,28 @@
 int main(int, char *[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager();
-    Raster *raster = new Raster();
     Search *search = new Search();
 
     Cloud modelC = im->getCoord("model.png");
     Cloud imageC = im->getCoord("image_test.png");
+
+    Raster *raster = new Raster(modelC, imageC);
+
     cv::Mat img = im->imread("image_test.png");
 
     float aMax = 2.f;
     float sMax = 0.4f;
     float dMin = 0.3f;
     float dMax = 1.f;
+    float ff = 1.f;
+    float fr = 0.8f;
+    float tf = 2.f*std::sqrt(2.f);
+    float tr = 2.f*std::sqrt(2.f);
 
-    cv::distanceTransform(img, img, cv::DIST_L2, 3);
-    cv::normalize(img, img, 0, 255.0, cv::NORM_MINMAX);
-    //im->imwrite("distanceTransform.png", img);
+    float xMax = float(img.cols);
+    float yMax = float(img.rows);
 
-    float xMax = (float)img.cols;
-    float yMax = (float)img.rows;
-
-    std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, 2.f, 0.4f, 0.3f, 1.f);
+    std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/
