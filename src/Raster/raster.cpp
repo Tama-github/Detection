@@ -36,7 +36,47 @@ bool Raster::isValid(float aMax, float sMax, float dMin, float dMax, glm::mat3 t
     return false;
 }
 
-void Raster::computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax) {
+/*std::vector<glm::mat3> Raster::getTranslations(std::vector<glm::mat3>& transforms, uint nTranslation, uint xMax, uint yMax) {
+
+
+    uint totalTransforms = uint(xMax * yMax);
+
+    if (totalTransforms < nTranslation)
+        nTranslation = totalTransforms;
+    std::vector<glm::mat3> trans;
+    int xTranslation = int(nTranslation / xMax);
+    int yTranslation = int(nTranslation % yMax);
+
+    for (uint t = 0; t < uint(transforms.size()); t++) {
+        glm::mat3 newTrans = transforms[t];
+        newTrans[0][2] = xTranslation;
+        newTrans[1][2] = yTranslation;
+        trans.emplace_back(newTrans);
+    }
+    return trans;
+}*/
+
+/*glm::mat3 Raster::getTranslation(std::vector<glm::mat3>& transforms, uint nTranslation, uint nTransform, uint xMax, uint yMax) {
+    uint totalTransforms = uint(xMax * yMax);
+
+    if (totalTransforms < nTranslation)
+        nTranslation = totalTransforms;
+    glm::mat3 trans;
+    int xTranslation = int(nTranslation / xMax);
+    int yTranslation = int(nTranslation % yMax);
+    std::cout << "coucou1" << std::endl;
+    std::cout << "nTransform : " << nTransform << ", transfoSize ! " << transforms.size()  << std::endl;
+
+    glm::mat3 newTrans = transforms[nTransform];
+    newTrans[0][2] = xTranslation;
+    newTrans[1][2] = yTranslation;
+    std::cout << "coucou2" << std::endl;
+    trans = newTrans;
+
+    return trans;
+}*/
+
+/*void Raster::computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax) {
     //std::vector<glm::mat3> newTransforms = transforms;
     #pragma omp parallel for
     for (unsigned int t = 0; t < transforms.size(); t++) {
@@ -58,7 +98,7 @@ void Raster::computeTranslations(std::vector<glm::mat3>& transforms, Cloud& mode
     }
     //transforms = newTransforms;
     //return;
-}
+}*/
 
 float Raster::clamp2N(float X) {
     bool stop = false;

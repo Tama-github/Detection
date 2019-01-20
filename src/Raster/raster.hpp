@@ -19,8 +19,12 @@ public:
     std::vector<glm::mat3> transformFilter(std::vector<glm::mat3>& transforms, float xMax, float yMax, Cloud& model);
     void computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax);
 
+
 private:
     float clamp2N(float X);
+//    static glm::mat3 getTranslation(std::vector<glm::mat3>& transforms, uint nTranslation, uint nTransform, uint xMax, uint yMax);
+//    static std::vector<glm::mat3> getTranslations(std::vector<glm::mat3>& transforms, uint nTranslation, uint xMax, uint yMax);
+
 
 };
 

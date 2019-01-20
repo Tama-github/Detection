@@ -16,6 +16,11 @@ int main(int, char *[]) {
     Cloud imageC = im->getCoord("image_test.png");
     cv::Mat img = im->imread("image_test.png");
 
+    float aMax = 2.f;
+    float sMax = 0.4f;
+    float dMin = 0.3f;
+    float dMax = 1.f;
+
     cv::distanceTransform(img, img, cv::DIST_L2, 3);
     cv::normalize(img, img, 0, 255.0, cv::NORM_MINMAX);
     //im->imwrite("distanceTransform.png", img);
@@ -29,9 +34,10 @@ int main(int, char *[]) {
     transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/
 
 
+
 //suppression Valérian
 /*    cv::Size sz = img.size();
-    CellTree tree = CellTree(0,300,0,300,-1,1,-1,1,-1,1,-1,1);
+    CellTree tree = CellTree(0,300,0,300);
     tree.subdivideCell();
     tree.displayMe();
 
@@ -40,8 +46,6 @@ int main(int, char *[]) {
 
 */
 //
-
-
     /*std::cout << "is ok, press something" << std::endl;
     #pragma omp parallel for
     for (unsigned int i = 0; i < transforms.size(); i++) {
@@ -58,8 +62,8 @@ int main(int, char *[]) {
 
     /*float ff = 1.f;
     float fr = 0.8f;
-    float tf = 2*std::sqrt(2);
-    float tr = 2*std::sqrt(2);
+    float tf = 2.f*std::sqrt(2.f);
+    float tr = 2.f*std::sqrt(2.f);
 
     search->search(modelC, imageC, transforms, ff, fr, tf, tr);*/
 

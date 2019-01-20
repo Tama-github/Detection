@@ -3,6 +3,9 @@
 double Distances::hDKth(Cloud &A, Cloud &B, float k) {
     uint aSize = A.size();
     uint bSize = B.size();
+    if (aSize == 0 || bSize == 0)
+        return std::numeric_limits<uint>::max();
+
     std::vector<double> distances;
     for (uint i = 0; i < aSize ; i++) {
         glm::vec2 a = A[i];
@@ -48,3 +51,57 @@ double Distances::Hf4 (Cloud& A, Cloud& B, float k) {
     return double(aSize*d1 + bSize*d2)/double(aSize+bSize);
 }
 
+double Distances::delta(Cloud &model, Cloud &image, uint ind) {
+    double distMin = std::numeric_limits<double>::max();
+    for (uint i = 0; i < image.size(); i++) {
+        double dist = double(glm::length(model[ind] - image[i]));
+        if (distMin > dist)
+            distMin = dist;
+    }
+    return distMin;
+}
+
+
+uint findInd(Cloud& cloud, float x, float y) {
+    float epsX = 1.f/cloud.getBox().xMax;
+    float epsY = 1.f/cloud.getBox().yMax;
+
+    for (uint i = 0; i < cloud.size(); i++) {
+        glm::vec2 p = cloud[i];
+        bool okX = p[0] >= x-epsX && p[0] <= x+epsX;
+        bool okY = p[1] >= y-epsY && p[1] <= y+epsY;
+        if (okX && okY)
+            return i;
+    }
+    return std::numeric_limits<uint>::max();
+}
+
+double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, float h) {
+    double minDist = std::numeric_limits<double>::max();
+    for (float i = x; i <= x+w; i++) {
+        for (float j = y; j <= x+h; j++) {
+            uint ind = findInd(model, i, j);
+            double dist;
+            if (ind == std::numeric_limits<uint>::max() || ind > model.size())
+                dist = std::numeric_limits<double>::max();
+            else
+                dist = delta(model, image, ind);
+            if (minDist > dist)
+                minDist = dist;
+        }
+    }
+    return minDist;
+}
+
+double Distances::f(Cloud& model, Cloud& image, double thau) {
+    if (model.size() == 0 || image.size() == 0)
+        return std::numeric_limits<uint>::max();
+
+    uint cardM = model.size();
+    uint cpt = 0;
+    for (uint i = 0; i < cardM; i++) {
+        if (delta(model, image, i) <= thau)
+            cpt++;
+    }
+    return cpt/cardM;
+}
