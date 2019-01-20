@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <limits>
 #include <omp.h>
+#include <Raster/raster.hpp>
 
 //typedef std::vector<glm::vec2> Cloud;
 typedef std::vector<glm::mat3> Transforms;
@@ -20,7 +21,7 @@ public:
 
     //Return a set of transforms
     Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3> transforms);
-    Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3> transforms, float ff, float fr, float tf, float tr);
+    Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3>& transforms, float ff, float fr, float tf, float tr);
 
 private:
     bool forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
