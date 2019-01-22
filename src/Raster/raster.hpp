@@ -13,7 +13,7 @@
 class Raster
 {
 public:
-    Raster(Cloud& model, Cloud& image);
+    Raster(Cloud& model, Cloud& image, cv::Mat& transFormImage);
 
     std::vector<glm::mat3> genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr);
     bool isValid(float aMax, float sMax, float dMin, float dMax, glm::mat3 transform);
@@ -26,10 +26,11 @@ private:
     float clamp2N(float X);
     bool forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
     bool reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
-    bool isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h);
+    bool isCellInteresting(Cloud& modelCloud, cv::Mat& imageCloud, float f, float t, float w, float h);
 
     Cloud& model;
     Cloud& image;
+    cv::Mat& transformImage;
 
 //    static glm::mat3 getTranslation(std::vector<glm::mat3>& transforms, uint nTranslation, uint nTransform, uint xMax, uint yMax);
 //    static std::vector<glm::mat3> getTranslations(std::vector<glm::mat3>& transforms, uint nTranslation, uint xMax, uint yMax);

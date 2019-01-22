@@ -10,7 +10,12 @@ int main(int, char *[]) {
     //Initialization of Image Manager
     ImageManager *im = new ImageManager();
     Search *search = new Search();
+    std::string imName = "image";
+    std::string modelName = "model.png";
 
+    Cloud modelC = im->getCoord(modelName);
+    Cloud imageC = im->getCoord(imName + ".png");
+    cv::Mat img;
 
     /*std::cout << "Debut distance transform" << std::endl;
     cv::Mat img = im->imread("image.png");
@@ -19,14 +24,21 @@ int main(int, char *[]) {
 
     im->imwrite("sortieDistanceTransform.png", img);
     std::cout << "Fin distance transform" << std::endl;*/
+    //cv::Mat imgDT = cv::imread("../Ressources/"+ imName + "_DT.png", CV_LOAD_IMAGE_GRAYSCALE);
+    //if (!imgDT.data) {
+        img = im->imread(imName + ".png");
+        cv::Mat imgDT = Distances::distanceTransform(img);
+        std::cout << imgDT.rows << ", " << imgDT.cols << std::endl;
+        im->imwrite(imName + "_DT.png", imgDT);
+    //}
+        /*
+    cv::distanceTransform(img, imgDT, CV_DIST_L2, 5);
+    cv::normalize(imgDT, imgDT, cv::NORM_MINMAX);
+    im->imwrite(imName + "sfjqmslfjmlqs.png", imgDT);
+*/
 
-    Cloud modelC = im->getCoord("xerox_model.png");
-    Cloud imageC = im->getCoord("xerox_img.png");
 
-    Raster *raster = new Raster(modelC, imageC);
-
-    cv::Mat img = im->imread("xerox_img.png");
-
+    Raster *raster = new Raster(modelC, imageC, imgDT);
 
 
 
@@ -44,6 +56,7 @@ int main(int, char *[]) {
 
     std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/

@@ -1,6 +1,6 @@
 #include "raster.hpp"
 
-Raster::Raster(Cloud& _model, Cloud& _image) : model{_model}, image{_image} {
+Raster::Raster(Cloud& _model, Cloud& _image, cv::Mat& _transFormImage) : model{_model}, image{_image}, transformImage{_transFormImage} {
 
 }
 
@@ -124,7 +124,7 @@ bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
     //return Distances::hDKth(imageCloud, modelCloud, f) < t;
 }
 
-bool Raster::isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h) {
+bool Raster::isCellInteresting(Cloud& modelCloud, cv::Mat& imageCloud, float f, float t, float w, float h) {
     return Distances::fp(modelCloud, imageCloud, double(f), double(t), w, h);
 }
 
@@ -194,7 +194,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
     //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
 
-    tree.subdivideCell2D();
+    tree.subdivideCell6D();
     tree.displayMe();
 
     std::vector<CellTree*> cells = tree.getChilds();
@@ -215,17 +215,19 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
-            Cloud subImage = image.getSubCloud(transformModel.getBox());
+            //Cloud subImage = image.getSubCloud(transformModel.getBox());
             std::cout << "w et h : " << currentCell->w << ", " << currentCell->h << std::endl;
             std::cout << "juste avant intersting" << std::endl;
-            std::cout << "tailles de model & subImage : " << transformModel.size() << ", " << subImage.size() << std::endl;
+            //std::cout << "tailles de model & subImage : " << transformModel.size() << ", " << subImage.size() << std::endl;
 
-            bool isInteresting = isCellInteresting(transformModel, subImage, ff, tf, currentCell->w, currentCell->h);
+            bool isInteresting = isCellInteresting(transformModel, transformImage, ff, tf, currentCell->w, currentCell->h);
+            std::cout << "coucou 3.5 " << std::endl;
+
             std::cout << "coucou intersting : " << isInteresting << std::endl;
 
             if (isInteresting) {
                 std::cout << "coucou 4 " << std::endl;
-                currentCell->subdivideCell2D();
+                currentCell->subdivideCell6D();
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
                 cells.insert(cells.begin(), tmp.begin(), tmp.end());

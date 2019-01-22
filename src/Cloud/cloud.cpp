@@ -34,7 +34,7 @@ Cloud Cloud::getSubCloud(Box box) {
     for (unsigned int i = 0; i < cloud.size(); i++) {
         float x = cloud[i][0];
         float y = cloud[i][1];
-        //if ((x >= xMin && x <= xMax) && (y >= yMin && y <= yMax))
+        if ((x >= xMin && x <= xMax) && (y >= yMin && y <= yMax))
             newCloud.emplace_back(glm::vec2(x, y));
     }
     return Cloud(newCloud);

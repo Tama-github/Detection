@@ -17,10 +17,10 @@ cv::Mat ImageManager::imread(std::string fileName) {
 bool ImageManager::imwrite(const std::string &fileName, cv::Mat img) {
     bool res = false;
 
-    std::string path = getEnvPath() + fileName;
+    //std::string path = getEnvPath() + fileName;
 
     try {
-        res = cv::imwrite(path,img);
+        res = cv::imwrite("../Ressources/" + fileName,img);
     }
     catch (std::exception& ex) {
         std::cout << "Exception converting image to PNG format: " << ex.what();

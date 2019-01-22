@@ -61,17 +61,11 @@ double Distances::delta(Cloud &model, Cloud &image, uint ind) {
     return distMin;
 }
 
-double Distances::delta(float x, float y, Cloud &image) {
-    double distMin = std::numeric_limits<double>::max();
-    #pragma omp parallel for
-    for (uint i = 0; i < image.size(); i++) {
-        double dist = double(glm::length(glm::vec2(x, y) - image[i]));
-        if (distMin > dist)
-            distMin = dist;
-    }
-    return distMin;
+double Distances::delta(float x, float y, cv::Mat& image) {
+    if (x < image.rows && y < image.cols)
+        return std::numeric_limits<double>::max();
+    return image.at<double>(int(x), int(y));
 }
-
 
 
 uint findInd(Cloud& cloud, float x, float y) {
@@ -88,7 +82,7 @@ uint findInd(Cloud& cloud, float x, float y) {
     return std::numeric_limits<uint>::max();
 }
 
-double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, float h) {
+double Distances::deltap(Cloud& model, cv::Mat& image, float x, float y, float w, float h) {
     /*double minDist = std::numeric_limits<double>::max();
     for (float i = x; i <= x+w; i++) {
         for (float j = y; j <= x+h; j++) {
@@ -135,10 +129,10 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
     return double(cpt)/double(cardM);
 }
 
-bool Distances::fp(Cloud& model, Cloud& image, double f, double t, float w, float h) {
-    if (model.size() == 0 || image.size() == 0)
+bool Distances::fp(Cloud& model, cv::Mat& image, double f, double t, float w, float h) {
+    if (model.size() == 0 || image.total() == 0)
         return false;
-
+    std::cout << "fpCouCou 1 : " << image.rows << ", " << image.cols << std::endl;
     uint cardM = model.size();
     uint cpt = 0;
     //#pragma omp parallel for
@@ -155,17 +149,19 @@ bool Distances::fp(Cloud& model, Cloud& image, double f, double t, float w, floa
 
 cv::Mat Distances::distanceTransform(cv::Mat img) {
     cv::Canny(img,img,50,150);
-
-
     cv::Mat res = cv::Mat::zeros(img.rows, img.cols, CV_32F);
 
     cv::Mat matCloud;
     cv::findNonZero(img, matCloud);
-    img = res = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    int rows = img.rows;
+    int cols = img.cols;
+    img = res = cv::Mat::zeros(rows, cols, CV_32F);
+
     for (unsigned int i = 0; i < matCloud.total(); i++ ) {
         //cloud.push_back(glm::vec2(matCloud.at<cv::Point>(int(i)).x,matCloud.at<cv::Point>(int(i)).y));
 
         img.at<float>(matCloud.at<cv::Point>(int(i)).x, matCloud.at<cv::Point>(int(i)).y) = 255.f;
+
     }
 
     //std::cout << img.rows << ", " << img.cols << std::endl;
@@ -193,7 +189,6 @@ cv::Mat Distances::distanceTransform(cv::Mat img) {
         }
        // std::cout << float(i)/float(img.rows)*100.f << "%" << std::endl;
     }
-
     cv::rotate(res, res, 0);
     cv::flip(res, res, 1);
 
