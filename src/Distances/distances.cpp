@@ -63,6 +63,7 @@ double Distances::delta(Cloud &model, Cloud &image, uint ind) {
 
 double Distances::delta(float x, float y, Cloud &image) {
     double distMin = std::numeric_limits<double>::max();
+    #pragma omp parallel for
     for (uint i = 0; i < image.size(); i++) {
         double dist = double(glm::length(glm::vec2(x, y) - image[i]));
         if (distMin > dist)
@@ -103,12 +104,15 @@ double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, 
     }
     return minDist;*/
     double minDist = std::numeric_limits<double>::max();
-    float j;
-    for (float i = x; i <= x+w; i++) {
-        for (j = y; j <= y+h; j++) {
+    //float j;
+    w = w+1;
+    h = h+1;
+    //#pragma omp parallel for reduction(min:minDist)
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
             double dist = std::numeric_limits<double>::max();
-            if (i <= model.getBox().xMax && j <= model.getBox().yMax)
-                dist = delta(i, j, image);
+            if (x+i <= model.getBox().xMax && y+j <= model.getBox().yMax)
+                dist = delta(x+i, y+j, image);
             if (minDist > dist)
                 minDist = dist;
         }
@@ -131,26 +135,70 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
     return double(cpt)/double(cardM);
 }
 
-double Distances::fp(Cloud& model, Cloud& image, double thau, float w, float h) {
+bool Distances::fp(Cloud& model, Cloud& image, double f, double t, float w, float h) {
     if (model.size() == 0 || image.size() == 0)
-        return 0;
+        return false;
 
     uint cardM = model.size();
     uint cpt = 0;
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
-        //std::cout << "iter = " << i << "/" << cardM << std::endl;
-        if (deltap(model, image, model[i][0], model[i][1], w, h) <= thau) {
-            #pragma omp atomic
-            cpt++;
+        std::cout << "iter = " << i << "/" << cardM << std::endl;
+        if (deltap(model, image, model[i][0], model[i][1], w, h) <= t) {
+            //#pragma omp atomic
+            if ((++cpt)/double(cardM) >= f) return true;
         }
 
     }
-    return double(cpt)/double(cardM);
+    return false;
 }
 
+cv::Mat Distances::distanceTransform(cv::Mat img) {
+    cv::Canny(img,img,50,150);
 
 
+    cv::Mat res = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+
+    cv::Mat matCloud;
+    cv::findNonZero(img, matCloud);
+    img = res = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    for (unsigned int i = 0; i < matCloud.total(); i++ ) {
+        //cloud.push_back(glm::vec2(matCloud.at<cv::Point>(int(i)).x,matCloud.at<cv::Point>(int(i)).y));
+
+        img.at<float>(matCloud.at<cv::Point>(int(i)).x, matCloud.at<cv::Point>(int(i)).y) = 255.f;
+    }
+
+    //std::cout << img.rows << ", " << img.cols << std::endl;
+    #pragma omp parallel for
+    for (uint i = 0; i < uint(img.rows); i++) {
+        for (uint j = 0; j < uint(img.cols); j++) {
+           // std::cout << img.at<float>(i, j) << std::endl;
+            float distMin = std::numeric_limits<float>::max();
+            for (uint k = 0; k < uint(img.rows); k++) {
+                for (uint l = 0; l < uint(img.cols); l++) {
+                    if (k != i && l != j && img.at<float>(int(k), int(l)) == 255.f) {
+                        float dist = glm::length(glm::vec2(i, j) - glm::vec2(k, l));
+                        if (distMin > dist) {
+                            #pragma omp critical
+                            {
+                                distMin = dist;
+                            }
+                        }
+                        if (img.at<float>(int(i), int(j)) == 255.f && i == k && j == l)
+                            distMin = 0.f;
+                    }
+                }
+                res.at<float>(int(i), int(j)) = distMin;
+            }
+        }
+       // std::cout << float(i)/float(img.rows)*100.f << "%" << std::endl;
+    }
+
+    cv::rotate(res, res, 0);
+    cv::flip(res, res, 1);
+
+    return res;
+}
 
 
 

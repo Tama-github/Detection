@@ -11,12 +11,24 @@ int main(int, char *[]) {
     ImageManager *im = new ImageManager();
     Search *search = new Search();
 
-    Cloud modelC = im->getCoord("model.png");
-    Cloud imageC = im->getCoord("image_test.png");
+
+    /*std::cout << "Debut distance transform" << std::endl;
+    cv::Mat img = im->imread("image.png");
+
+    img = Distances::distanceTransform(img);
+
+    im->imwrite("sortieDistanceTransform.png", img);
+    std::cout << "Fin distance transform" << std::endl;*/
+
+    Cloud modelC = im->getCoord("xerox_model.png");
+    Cloud imageC = im->getCoord("xerox_img.png");
 
     Raster *raster = new Raster(modelC, imageC);
 
-    cv::Mat img = im->imread("image_test.png");
+    cv::Mat img = im->imread("xerox_img.png");
+
+
+
 
     float aMax = 2.f;
     float sMax = 0.4f;
@@ -24,8 +36,8 @@ int main(int, char *[]) {
     float dMax = 1.f;
     float ff = 1.f;
     float fr = 0.8f;
-    float tf = 2.f*std::sqrt(2.f);
-    float tr = 2.f*std::sqrt(2.f);
+    float tf = std::sqrt(5.f);
+    float tr = std::sqrt(5.f);
 
     float xMax = float(img.cols);
     float yMax = float(img.rows);

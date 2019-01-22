@@ -125,7 +125,7 @@ bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
 }
 
 bool Raster::isCellInteresting(Cloud& modelCloud, Cloud& imageCloud, float f, float t, float w, float h) {
-    return Distances::fp(modelCloud, imageCloud, double(t), w, h) >= double(f);
+    return Distances::fp(modelCloud, imageCloud, double(f), double(t), w, h);
 }
 
 std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
