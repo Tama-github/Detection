@@ -81,7 +81,7 @@ glm::mat3 CellTree::getTransformTL() {
     return res;
 }
 
-void CellTree::subdivideCell(){    
+void CellTree::subdivideCell6D(){
     /*if (this->depth == MAX_DEPTH) {
         return;
     }*/
@@ -139,6 +139,31 @@ void CellTree::subdivideCell(){
     }
 }
 
+void CellTree::subdivideCell2D(){
+    /*if (this->depth == MAX_DEPTH) {
+        return;
+    }*/
+    hasChild = true;
+    float mid_x = float(float(this->coord.xmax) + float(this->coord.xmin))/float(R);
+    float mid_y = float(float(this->coord.ymax) + float(this->coord.ymin))/float(R);
+
+    std::cout << "mid_x = " << mid_x << std::endl;
+    std::cout << "mid_y = " << mid_y << std::endl;
+
+    for(float i = 0; i < R; i++)
+    {
+        float x_min = this->coord.xmin + i * mid_x;
+        float x_max = this->coord.xmax - (1.f-i) * mid_x;
+
+        for(float j = 0; j < R; j++)
+        {
+            float y_min = this->coord.ymin + j * mid_y;
+            float y_max = this->coord.ymax - (1.f-j) * mid_y;
+            this->children.emplace_back(new CellTree(x_min, x_max, y_min, y_max, coord.a00min,coord.a00max,coord.a01min,coord.a01min,coord.a10min,coord.a10max,coord.a11min,coord.a11max,i1,i2,i3,i4,i5,i6, this));
+        }
+    }
+}
+
 void CellTree::displayMe(){
     /*
     //std::cout << this->depth << std::endl;
@@ -161,7 +186,7 @@ void CellTree::displayMe(){
     if (!hasChild) return;
 
     std::cout << "My children :" << std::endl;
-    for(uint i = 0; i < CHILDREN_NUMBER; i++)
+    for(uint i = 0; i < this->children.size(); i++)
     {
         this->children[i]->printCoordinate();
     }

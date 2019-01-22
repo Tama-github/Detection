@@ -194,7 +194,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
     //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
 
-    tree.subdivideCell();
+    tree.subdivideCell2D();
     tree.displayMe();
 
     std::vector<CellTree*> cells = tree.getChilds();
@@ -225,7 +225,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
             if (isInteresting) {
                 std::cout << "coucou 4 " << std::endl;
-
+                currentCell->subdivideCell2D();
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
                 cells.insert(cells.begin(), tmp.begin(), tmp.end());

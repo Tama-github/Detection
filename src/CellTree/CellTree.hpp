@@ -19,7 +19,8 @@ class CellTree
         std::vector<CellTree*> getChilds();
         bool getInterest();
         void setInterest(bool value);   
-        void subdivideCell();
+        void subdivideCell6D();
+        void subdivideCell2D();
         void displayMe();
         std::vector<CellTree> getInterestingCells();
         bool hasOneElem();

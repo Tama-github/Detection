@@ -103,21 +103,24 @@ double Distances::deltap(Cloud& model, Cloud& image, float x, float y, float w, 
     }
     return minDist;*/
     double minDist = std::numeric_limits<double>::max();
-        for (float i = x; i <= x+w; i++) {
-            for (float j = y; j <= x+h; j++) {
-                double dist = minDist = std::numeric_limits<double>::max();
-                if (i <= model.getBox().xMax && j <= model.getBox().yMax)
-                    dist = delta(i, j, image);
-                if (minDist > dist)
-                    minDist = dist;
-            }
+    float j;
+    for (float i = x; i <= x+w; i++) {
+        for (j = y; j <= y+h; j++) {
+            double dist = std::numeric_limits<double>::max();
+            if (i <= model.getBox().xMax && j <= model.getBox().yMax)
+                dist = delta(i, j, image);
+            if (minDist > dist)
+                minDist = dist;
         }
-        return minDist;
+        //std::cout << "iter = " << i-x << std::endl;
+    }
+
+    return minDist;
 }
 
 double Distances::f(Cloud& model, Cloud& image, double thau) {
     if (model.size() == 0 || image.size() == 0)
-        return std::numeric_limits<uint>::max();
+        return 0;
 
     uint cardM = model.size();
     uint cpt = 0;
@@ -130,16 +133,18 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
 
 double Distances::fp(Cloud& model, Cloud& image, double thau, float w, float h) {
     if (model.size() == 0 || image.size() == 0)
-        return std::numeric_limits<uint>::max();
+        return 0;
 
     uint cardM = model.size();
     uint cpt = 0;
     #pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
+        //std::cout << "iter = " << i << "/" << cardM << std::endl;
         if (deltap(model, image, model[i][0], model[i][1], w, h) <= thau) {
             #pragma omp atomic
             cpt++;
         }
+
     }
     return double(cpt)/double(cardM);
 }
