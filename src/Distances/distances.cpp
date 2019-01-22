@@ -132,12 +132,10 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
 bool Distances::fp(Cloud& model, cv::Mat& image, double f, double t, float w, float h) {
     if (model.size() == 0 || image.total() == 0)
         return false;
-    std::cout << "fpCouCou 1 : " << image.rows << ", " << image.cols << std::endl;
     uint cardM = model.size();
     uint cpt = 0;
     //#pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
-        std::cout << "iter = " << i << "/" << cardM << std::endl;
         if (deltap(model, image, model[i][0], model[i][1], w, h) <= t) {
             //#pragma omp atomic
             if ((++cpt)/double(cardM) >= f) return true;
