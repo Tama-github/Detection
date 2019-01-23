@@ -22,6 +22,7 @@ public:
     //Return a set of transforms
     //Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3> transforms);
     //Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3>& transforms, float ff, float fr, float tf, float tr);
+    Transforms search(Cloud &modelCloud, Cloud &imageCloud, float ff, float fr, float tf, float tr);
 
 private:
     bool forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);

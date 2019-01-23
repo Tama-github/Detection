@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <limits>
 #include "Cloud/cloud.hpp"
+#include "../ImageManager/imagemanager.hpp"
 
 class Distances
 {
@@ -29,7 +30,7 @@ public:
     static double f(Cloud& model, Cloud& image, double thau);
     static double fp(Cloud& model, cv::Mat& imageCloud, double t, float w, float h);
 
-    static cv::Mat distanceTransform(cv::Mat img);
+    static cv::Mat distanceTransform(cv::Mat& img);
 
    // static double probe (std::vector<glm::vec2>& A, )
 

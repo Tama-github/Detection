@@ -10,51 +10,33 @@
 int main(int, char *[]) {
     //Initialization of Image Manager
     //cv::WINOWS_AUTORIZE;
-    ImageManager *im = new ImageManager();
+
+
     Search *search = new Search();
+
+
     std::string imName = "xerox_img";
     std::string modelName = "xerox_model.png";
 
+    ImageManager *im = new ImageManager();
     Cloud modelC = im->getCoord(modelName);
     Cloud imageC = im->getCoord(imName + ".png");
     cv::Mat img;
 
-    /*std::cout << "Debut distance transform" << std::endl;
-    cv::Mat img = im->imread("image.png");
-
-    img = Distances::distanceTransform(img);
-
-    im->imwrite("sortieDistanceTransform.png", img);
-    std::cout << "Fin distance transform" << std::endl;*/
-    //cv::Mat imgDT = cv::imread("../Ressources/"+ imName + "_DT.png", CV_LOAD_IMAGE_GRAYSCALE);
-    //if (!imgDT.data) {
-    std::cout << "1" << std::endl;
     img = im->imread(imName + ".png");
-    std::cout << "2" << std::endl;
-    cv::Mat imgDT = Distances::distanceTransform(img);
-    //cv::normalize(imgDT, imgDT, 0, 1.0, NORM_MINMAX);
+    cv::Mat edges;
+    cv::Canny(img, edges, 50, 150);
+    cv::bitwise_not(edges,edges);
+    cv::Mat res;
 
-    //cv::namedWindow( "window", cv::WINDOW_AUTOSIZE );
-    cv::imshow("result of the distance transform",imgDT);
-    std::cout << imgDT.rows << ", " << imgDT.cols << std::endl;
-    im->imwrite(imName + "_DT.png", imgDT);
-
+    cv::distanceTransform(edges,res,CV_DIST_L2, 3);
+    im->imwrite(imName + "_DT.png", res);
+    //im->imwrite(imName + "_edges.png", edges);
 
     std::cout << "Press ENTER to continue...";
     std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
 
-    //}
-        /*
-    cv::distanceTransform(img, imgDT, CV_DIST_L2, 5);
-    cv::normalize(imgDT, imgDT, cv::NORM_MINMAX);
-    im->imwrite(imName + "sfjqmslfjmlqs.png", imgDT);
-*/
-
-
-    Raster *raster = new Raster(modelC, imageC, imgDT);
-
-
-
+    // Param definitions
     float aMax = 2.f;
     float sMax = 0.4f;
     float dMin = 0.3f;
@@ -67,8 +49,14 @@ int main(int, char *[]) {
     float xMax = float(img.cols);
     float yMax = float(img.rows);
 
+    // Décomposition en cellule
+    Raster *raster = new Raster(modelC, imageC, res);
     std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+
+    //Translation uniquement
+    //Search::search(modelC, imageC, ff, fr, tf, tr);
+
 
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
