@@ -38,7 +38,7 @@ int main(int, char *[]) {
     float sMax = 0.4f;
     float dMin = 0.3f;
     float dMax = 1.f;
-    float ff = 0.7f;
+    float ff = 0.6f;
     float fr = 0.5f;
     float tf = std::sqrt(5.f);
     float tr = std::sqrt(5.f);
@@ -55,10 +55,22 @@ int main(int, char *[]) {
     Search *search = new Search(res);
     std::vector<glm::mat3> transforms = search->search(modelC, imageC, ff, fr, tf, tr);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+    for (uint i = 0; i < transforms.size(); i++) {
+        std::cout << "[" << transforms[i][0][0] << ", " << transforms[i][0][1] << ", "<< transforms[i][0][2] << ";" << std::endl
+                    << transforms[i][1][0] << ", " << transforms[i][1][1] << ", "<< transforms[i][1][2] << ";" << std::endl
+                    << transforms[i][2][0] << ", " << transforms[i][2][1] << ", "<< transforms[i][2][2] << ";" << std::endl << "]";
 
+    }
+
+    //cv::Mat resultat = img;
+    //std::vector<glm::mat3> transforms = {glm::mat3(1.f)};
+    //im->printRes(resultat, transforms, modelC);
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
     transforms = raster->transformFilter(transforms, img.cols, img.rows, modelC);*/
+    cv::Mat model = im->imread(modelName);
+    cv::Canny(model, edges, 50, 150);
+    im->imwrite("modelCanny.png", edges);
 
 
 

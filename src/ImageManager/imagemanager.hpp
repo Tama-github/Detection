@@ -21,6 +21,9 @@ public:
     // Point cloud to image
     void cloudToImage(Cloud& cloud, cv::Mat& img);
 
+    void printRes(cv::Mat& img, std::vector<glm::mat3>& transforms, Cloud& model);
+
+
 private:
     std::string getEnvPath();
 

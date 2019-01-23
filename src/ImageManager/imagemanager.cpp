@@ -75,6 +75,23 @@ void ImageManager::cloudToImage(Cloud& cloud, cv::Mat& img) {
     return;
 }
 
+void ImageManager::printRes(cv::Mat& img, std::vector<glm::mat3>& transforms, Cloud& model) {
+    for (uint i = 0; i < transforms.size(); i++) {
+        Cloud modelTmp = model.transformCloud(transforms[i]);
+        for (uint l = 0; l < uint(model.size()); l++) {
+            int x = int(model[l][1]);
+            int y = int(model[l][0]);
+            if (x < img.rows && y < img.cols && x > 0 && y > 0)
+                img.at<float>(x, y) = 0.f;
+        }
+    }
+
+    // cv::addWeighted(img, )
+    imwrite("restultat.png", img);
+}
+
+
+
 std::string ImageManager::getEnvPath() {
     std::string env = std::getenv("PWD");
     
@@ -82,6 +99,7 @@ std::string ImageManager::getEnvPath() {
 
     return env.substr(0,pos) + "Ressources/";
 }
+
 
 
 
