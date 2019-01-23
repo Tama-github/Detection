@@ -38,7 +38,7 @@ int main(int, char *[]) {
     float sMax = 0.4f;
     float dMin = 0.3f;
     float dMax = 1.f;
-    float ff = 0.8f;
+    float ff = 0.7f;
     float fr = 0.5f;
     float tf = std::sqrt(5.f);
     float tr = std::sqrt(5.f);

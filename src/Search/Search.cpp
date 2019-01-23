@@ -8,7 +8,7 @@ Search::Search(cv::Mat& _transDist) : transDist{_transDist}{
 bool Search::forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
     double fRes = Distances::f(modelCloud, imageCloud, double(t));
 
-    std::cout << "forward fRes : " << fRes << std::endl;
+    //std::cout << "forward fRes : " << fRes << std::endl;
 
     return fRes >= double(f);
     //return Distances::hDKth(modelCloud, imageCloud, f) < t;
@@ -118,7 +118,7 @@ Transforms Search::search(Cloud &modelCloud, Cloud &imageCloud, float ff, float 
             bool fCriterion = forwardCriterion(tmp, subCloud, ff, tf);
             bool rCriterion = false;
             if (fCriterion)
-                rCriterion = reverseCriterion(tmp, subCloud, fr, tr);
+                rCriterion = reverseCriterion(subCloud, tmp, fr, tr);
             if (rCriterion || fCriterion)
                 std::cout << "reverse Criterion : " << rCriterion << ", forward criterion : " << fCriterion << std::endl;
             if (rCriterion && fCriterion) {
