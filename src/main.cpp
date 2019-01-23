@@ -47,11 +47,19 @@ int main(int, char *[]) {
     float yMax = float(img.rows);
 
     // Décomposition en cellule
-    //Raster *raster = new Raster(modelC, imageC, res);
-    //std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
-    //std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+    Raster *raster = new Raster(modelC, imageC, res);
+    std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
+    std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+    std::cout << "tes transformations : " << std::endl;
+    for (int i = 0; i < transforms.size(); i++) {
+        std::cout << transforms[i][0][0] << " " << transforms[i][0][1] << " " << transforms[i][0][2] << std::endl
+                  << transforms[i][1][0] << " " << transforms[i][1][1] << " " << transforms[i][1][2] << std::endl
+                  << transforms[i][2][0] << " " << transforms[i][2][1] << " " << transforms[i][2][2] << std::endl
+        << std:: endl;
+    }
 
     //Translation uniquement
+            /*
     Search *search = new Search(res);
     std::vector<glm::mat3> transforms = search->search(modelC, imageC, ff, fr, tf, tr);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
@@ -59,8 +67,13 @@ int main(int, char *[]) {
         std::cout << "[" << transforms[i][0][0] << ", " << transforms[i][0][1] << ", "<< transforms[i][0][2] << ";" << std::endl
                     << transforms[i][1][0] << ", " << transforms[i][1][1] << ", "<< transforms[i][1][2] << ";" << std::endl
                     << transforms[i][2][0] << ", " << transforms[i][2][1] << ", "<< transforms[i][2][2] << ";" << std::endl << "]";
+                     */
 
-    }
+    //Search *search = new Search(res);
+    //std::vector<glm::mat3> transforms = search->search(modelC, imageC, ff, fr, tf, tr);
+    //std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+
+
 
     //cv::Mat resultat = img;
     //std::vector<glm::mat3> transforms = {glm::mat3(1.f)};
@@ -107,7 +120,7 @@ int main(int, char *[]) {
     search->search(modelC, imageC, transforms, ff, fr, tf, tr);*/
 
     delete im;
-   // delete raster;
-    delete search;
+    delete raster;
+    //delete search;
     return 0;
 }
