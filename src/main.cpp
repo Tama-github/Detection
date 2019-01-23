@@ -12,9 +12,6 @@ int main(int, char *[]) {
     //cv::WINOWS_AUTORIZE;
 
 
-    Search *search = new Search();
-
-
     std::string imName = "xerox_img";
     std::string modelName = "xerox_model.png";
 
@@ -33,16 +30,16 @@ int main(int, char *[]) {
     im->imwrite(imName + "_DT.png", res);
     //im->imwrite(imName + "_edges.png", edges);
 
-    std::cout << "Press ENTER to continue...";
-    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+    //std::cout << "Press ENTER to continue...";
+    //std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
 
     // Param definitions
     float aMax = 2.f;
     float sMax = 0.4f;
     float dMin = 0.3f;
     float dMax = 1.f;
-    float ff = 1.f;
-    float fr = 0.6f;
+    float ff = 0.8f;
+    float fr = 0.5f;
     float tf = std::sqrt(5.f);
     float tr = std::sqrt(5.f);
 
@@ -50,13 +47,14 @@ int main(int, char *[]) {
     float yMax = float(img.rows);
 
     // Décomposition en cellule
-    Raster *raster = new Raster(modelC, imageC, res);
-    std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
-    std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+    //Raster *raster = new Raster(modelC, imageC, res);
+    //std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
+    //std::cout << "nombre de transformations : " << transforms.size() << std::endl;
 
     //Translation uniquement
-    //Search::search(modelC, imageC, ff, fr, tf, tr);
-
+    Search *search = new Search(res);
+    std::vector<glm::mat3> transforms = search->search(modelC, imageC, ff, fr, tf, tr);
+    std::cout << "nombre de transformations : " << transforms.size() << std::endl;
 
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
@@ -97,7 +95,7 @@ int main(int, char *[]) {
     search->search(modelC, imageC, transforms, ff, fr, tf, tr);*/
 
     delete im;
-    delete raster;
+   // delete raster;
     delete search;
     return 0;
 }

@@ -45,7 +45,7 @@ Cloud Cloud::transformCloud(glm::mat3 transform) {
 
     std::vector<glm::vec2> newCloud;
     for (unsigned int i = 0; i < cloud.size(); i++) {
-        glm::vec3 temp = transform * glm::vec3(cloud[i][0], cloud[i][1], 1);
+        glm::vec3 temp = glm::vec3(cloud[i][0], cloud[i][1], 1) * transform;
         newCloud.emplace_back(glm::vec2(temp[0], temp[1]));
     }
     return Cloud(newCloud);

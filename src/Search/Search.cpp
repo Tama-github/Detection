@@ -1,17 +1,35 @@
 #include "Search.hpp"
 
-Search::Search() {
+Search::Search(cv::Mat& _transDist) : transDist{_transDist}{
 
 }
 
 
 bool Search::forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
-    return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
+    double fRes = Distances::f(modelCloud, imageCloud, double(t));
+
+    std::cout << "forward fRes : " << fRes << std::endl;
+
+    return fRes >= double(f);
+    //return Distances::hDKth(modelCloud, imageCloud, f) < t;
+}
+
+bool Search::forwardCriterion (Cloud& modelCloud, cv::Mat& imageCloud, float f, float t) {
+
+    double fRes = Distances::f(modelCloud, imageCloud, double(t));
+
+   // std::cout << "forward mat dist : " << fRes << std::endl;
+
+    return fRes >= double(f);
     //return Distances::hDKth(modelCloud, imageCloud, f) < t;
 }
 
 bool Search::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
-    return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
+    double fRes = Distances::f(modelCloud, imageCloud, double(t));
+
+    //std::cout << "reverse mat dist : " << fRes << std::endl;
+
+    return fRes >= double(f);
     //return Distances::hDKth(imageCloud, modelCloud, f) < t;
 }
 
@@ -69,7 +87,7 @@ bool Search::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
 
 Transforms Search::search(Cloud &modelCloud, Cloud &imageCloud, float ff, float fr, float tf, float tr) {
     std::vector<glm::mat3> transforms;
-
+    std::cout << "Début de la recherche." << std::endl;
     float xModel = modelCloud.getBox().xMax;
     float xImage = imageCloud.getBox().xMax;
     float yModel = modelCloud.getBox().yMax;
@@ -96,9 +114,11 @@ Transforms Search::search(Cloud &modelCloud, Cloud &imageCloud, float ff, float 
             Cloud tmp = modelCloud.transformCloud(mat);
             Cloud::Box box = tmp.getBox(tmp.getVector());
           //  std::cout << "box : " << box.xMin<<", "<<box.xMax<<", "<<box.yMin<<", "<<box.yMax<<std::endl;
-            Cloud subCloud = imageCloud.getSubCloud(tmp.getBox());
-            bool rCriterion = reverseCriterion(tmp, subCloud, fr, tr);
-            bool fCriterion = forwardCriterion(tmp, imageCloud, ff, tf);
+            Cloud subCloud = imageCloud.getSubCloud(box);
+            bool fCriterion = forwardCriterion(tmp, subCloud, ff, tf);
+            bool rCriterion = false;
+            if (fCriterion)
+                rCriterion = reverseCriterion(tmp, subCloud, fr, tr);
             if (rCriterion || fCriterion)
                 std::cout << "reverse Criterion : " << rCriterion << ", forward criterion : " << fCriterion << std::endl;
             if (rCriterion && fCriterion) {
