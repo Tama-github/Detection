@@ -125,7 +125,7 @@ bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, fl
 }
 
 bool Raster::isCellInteresting(Cloud& modelCloud, cv::Mat& imageCloud, float f, float t, float w, float h) {
-    return Distances::fp(modelCloud, imageCloud, double(f), double(t), w, h);
+    return Distances::fp(modelCloud, imageCloud, double(t), w, h) >= double(f);
 }
 
 std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
@@ -138,6 +138,8 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     float i4 = 1/yMax;
     float i5 = 1.f;
     float i6 = 1.f;
+
+    std::cout << "Space base vector : " << "(" << i1 << "," << i2 << "," << i3 << "," << i4 << "," << i5 << "," << i6 <<  ")" << std::endl;
 
     //initialisation of the first tl
     float tl1, tl2, tl3, tl4, tl5, tl6;
@@ -172,11 +174,15 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
     //Uniformisation
     xSize = ySize = xMax = yMax = std::max(std::max(xSize,ySize),std::max(xMax,yMax));
+    xSize -= 1.f/i1;
+    ySize -= 1.f/i2;
 
     //Convertion to axis
     th1 = th3 = (xSize * i1);
     th2 = th4 = (ySize * i2);
     th5 = th6 = xMax;
+
+    std::cout << "Space bondaries :  xSize = " << xSize*i1 << "  |  ySize = " << ySize*i2 << std::endl;
 
     /*std::cout << "After the clamping " << std::endl;
 
@@ -190,7 +196,8 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     std::cout << "taille de la  cellule sur th5 = " << th5 << std::endl;
     std::cout << "taille de la  cellule sur th6 = " << th6 << std::endl;*/
 
-    CellTree tree = CellTree(tl5, th5, tl6, th6, tl1, th1, tl2, th2, tl3, th3, tl4, th4, i1, i2, i3, i4, i5, i6);
+    //CellTree tree = CellTree(tl5, th5, tl6, th6, tl1, th1, tl2, th2, tl3, th3, tl4, th4, i1, i2, i3, i4, i5, i6);
+    CellTree tree = CellTree(0, xMax, 0, xMax, -1.f/i1, xSize, -1.f/i2, ySize, -1.f/i3, xSize, -1.f/i4, ySize, i1, i2, i3, i4, i5, i6);
 
     //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
 
@@ -199,8 +206,10 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
 
     std::vector<CellTree*> cells = tree.getChilds();
     for (uint i = 0; i < cells.size(); i++) {
-        std::cout << "(c'est le lol pourcentage) " << (float(i)*100.f/float(cells.size())) << "%" << std::endl;
+        std::cout << "____________________________________________________" << std::endl
+                  << "(c'est le lol pourcentage) " << (float(i+1)*100.f/float(cells.size())) << "%" << std::endl;
         CellTree* currentCell = cells[i];
+        currentCell->printCoordinate();
         if (currentCell->hasOneElem()) {
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
@@ -217,7 +226,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
             std::cout << "juste avant intersting" << std::endl;
             //std::cout << "tailles de model & subImage : " << transformModel.size() << ", " << subImage.size() << std::endl;
 
-            bool isInteresting = isCellInteresting(transformModel, transformImage, ff, tf, currentCell->w, currentCell->h);
+            bool isInteresting = isCellInteresting(transformModel, transformImage, ff, tf, std::abs(currentCell->w), std::abs(currentCell->h));
             std::cout << "juste après intersting : " << isInteresting << std::endl;
 
 
@@ -225,7 +234,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
                 currentCell->subdivideCell6D();
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
-                cells.insert(cells.begin(), tmp.begin(), tmp.end());
+                cells.insert(cells.end(), tmp.begin(), tmp.end());
             } else {
 
                 cells.erase(cells.begin());

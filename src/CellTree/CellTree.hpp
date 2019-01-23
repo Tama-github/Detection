@@ -27,7 +27,7 @@ class CellTree
         glm::mat3 getTransformTL();
         float w;
         float h;
-
+        void printCoordinate();
 
     private:
         struct Coordinate
@@ -58,7 +58,7 @@ class CellTree
         float i5;
         float i6;
         void recursiveInterestingCells(std::vector<CellTree> * list);
-        void printCoordinate();
+
 };
 
 #endif //CELLTREE_HPP

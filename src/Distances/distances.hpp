@@ -27,7 +27,7 @@ public:
     static double deltap(Cloud& model, cv::Mat &image, float x, float y, float w, float h);
 
     static double f(Cloud& model, Cloud& image, double thau);
-    static bool fp(Cloud& model, cv::Mat &image, double f, double t, float w, float h);
+    static double fp(Cloud& model, cv::Mat& imageCloud, double t, float w, float h);
 
     static cv::Mat distanceTransform(cv::Mat img);
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include "ImageManager/imagemanager.hpp"
 #include "CellTree/CellTree.hpp"
 #include "Raster/raster.hpp"
@@ -8,10 +9,11 @@
 
 int main(int, char *[]) {
     //Initialization of Image Manager
+    //cv::WINOWS_AUTORIZE;
     ImageManager *im = new ImageManager();
     Search *search = new Search();
-    std::string imName = "image";
-    std::string modelName = "model.png";
+    std::string imName = "xerox_img";
+    std::string modelName = "xerox_model.png";
 
     Cloud modelC = im->getCoord(modelName);
     Cloud imageC = im->getCoord(imName + ".png");
@@ -26,10 +28,21 @@ int main(int, char *[]) {
     std::cout << "Fin distance transform" << std::endl;*/
     //cv::Mat imgDT = cv::imread("../Ressources/"+ imName + "_DT.png", CV_LOAD_IMAGE_GRAYSCALE);
     //if (!imgDT.data) {
-        img = im->imread(imName + ".png");
-        cv::Mat imgDT = Distances::distanceTransform(img);
-        std::cout << imgDT.rows << ", " << imgDT.cols << std::endl;
-        im->imwrite(imName + "_DT.png", imgDT);
+    std::cout << "1" << std::endl;
+    img = im->imread(imName + ".png");
+    std::cout << "2" << std::endl;
+    cv::Mat imgDT = Distances::distanceTransform(img);
+    //cv::normalize(imgDT, imgDT, 0, 1.0, NORM_MINMAX);
+
+    //cv::namedWindow( "window", cv::WINDOW_AUTOSIZE );
+    cv::imshow("result of the distance transform",imgDT);
+    std::cout << imgDT.rows << ", " << imgDT.cols << std::endl;
+    im->imwrite(imName + "_DT.png", imgDT);
+
+
+    std::cout << "Press ENTER to continue...";
+    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+
     //}
         /*
     cv::distanceTransform(img, imgDT, CV_DIST_L2, 5);
@@ -47,7 +60,7 @@ int main(int, char *[]) {
     float dMin = 0.3f;
     float dMax = 1.f;
     float ff = 1.f;
-    float fr = 0.8f;
+    float fr = 0.6f;
     float tf = std::sqrt(5.f);
     float tr = std::sqrt(5.f);
 

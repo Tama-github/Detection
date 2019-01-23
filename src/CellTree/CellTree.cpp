@@ -21,8 +21,18 @@ CellTree::CellTree(float xmin, float xmax, float ymin, float ymax, float a00min,
     i5 = ii5;
     i6 = ii6;
 
-    w = (a00max/i1-a00min/i1)+(a01max/i2-a01min/i2)+(xmax/i5-xmin/i5);
-    h = (a10max/i3-a10min/i3)+(a11max/i4-a11min/i4)+(ymax/i6-ymin/i6);
+    std::cout << "test : "
+              << "a00max = " << a00max << std::endl
+              << "a00min = " << a00min << std::endl
+              << "a01max = " << a01max << std::endl
+              << "a01min = " << a01min << std::endl
+              << "a10max = " << a10max << std::endl
+              << "a10min = " << a10min << std::endl
+              << "a11max = " << a11max << std::endl
+              << "a11min = " << a11min << std::endl;
+
+    w = (a00max-a00min)+(a01max-a01min)+(xmax-xmin);
+    h = (a10max-a10min)+(a11max-a11min)+(ymax-ymin);
 
     hasChild = false;
 
@@ -66,17 +76,23 @@ void CellTree::setInterest(bool value){
 }
 
 bool CellTree::hasOneElem() {
-    return h == 0.f && w == 0.f;
+    return h == 0.f && w == 0.f
+            && coord.a00max == coord.a00min
+            && coord.a10max == coord.a10min
+            && coord.a01max == coord.a01min
+            && coord.a11max == coord.a11min
+            && coord.xmax == coord.xmin
+            && coord.ymax == coord.ymin;
 }
 
 glm::mat3 CellTree::getTransformTL() {
     glm::mat3 res = glm::mat3(0);
-    res[0][0] = coord.a00min;
-    res[0][1] = coord.a01min;
-    res[1][0] = coord.a10min;
-    res[1][1] = coord.a11min;
-    res[0][2] = coord.xmin;
-    res[1][2] = coord.ymin;
+    res[0][0] = coord.a00min * i1;
+    res[0][1] = coord.a01min * i2;
+    res[1][0] = coord.a10min * i3;
+    res[1][1] = coord.a11min * i4;
+    res[0][2] = coord.xmin * i5;
+    res[1][2] = coord.ymin * i6;
     res[2][2] = 1.f;
     return res;
 }
@@ -88,10 +104,10 @@ void CellTree::subdivideCell6D(){
     hasChild = true;
     float mid_x = float(float(this->coord.xmax) + float(this->coord.xmin))/float(R);
     float mid_y = float(float(this->coord.ymax) + float(this->coord.ymin))/float(R);
-    float mid_a00 = float(float(this->coord.a00max) + float(this->coord.a00max))/float(R);
-    float mid_a01 = float(float(this->coord.a01max) + float(this->coord.a01max))/float(R);
-    float mid_a10 = float(float(this->coord.a10max) + float(this->coord.a10max))/float(R);
-    float mid_a11 = float(float(this->coord.a11max) + float(this->coord.a11max))/float(R);
+    float mid_a00 = float(float(this->coord.a00max) + float(this->coord.a00min))/float(R);
+    float mid_a01 = float(float(this->coord.a01max) + float(this->coord.a01min))/float(R);
+    float mid_a10 = float(float(this->coord.a10max) + float(this->coord.a10min))/float(R);
+    float mid_a11 = float(float(this->coord.a11max) + float(this->coord.a11min))/float(R);
 
     std::cout << "mid_x = " << mid_x << std::endl;
     std::cout << "mid_y = " << mid_y << std::endl;
