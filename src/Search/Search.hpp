@@ -17,7 +17,7 @@ typedef std::vector<glm::mat3> Transforms;
 class Search
 {
 public:
-    Search();
+    Search(cv::Mat &_transDist);
 
     //Return a set of transforms
     //Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3> transforms);
@@ -25,9 +25,12 @@ public:
     Transforms search(Cloud &modelCloud, Cloud &imageCloud, float ff, float fr, float tf, float tr);
 
 private:
+    bool forwardCriterion (Cloud& modelCloud, cv::Mat &imageCloud, float f, float t);
     bool forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
+
     bool reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t);
 
+    cv::Mat& transDist;
 };
 
 #endif // SEARCH_HPP

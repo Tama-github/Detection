@@ -12,9 +12,6 @@ int main(int, char *[]) {
     //cv::WINOWS_AUTORIZE;
 
 
-    Search *search = new Search();
-
-
     std::string imName = "xerox_img";
     std::string modelName = "xerox_model.png";
 
@@ -33,16 +30,16 @@ int main(int, char *[]) {
     im->imwrite(imName + "_DT.png", res);
     //im->imwrite(imName + "_edges.png", edges);
 
-    std::cout << "Press ENTER to continue...";
-    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+    //std::cout << "Press ENTER to continue...";
+    //std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
 
     // Param definitions
     float aMax = 2.f;
     float sMax = 0.4f;
     float dMin = 0.3f;
     float dMax = 1.f;
-    float ff = 1.f;
-    float fr = 0.6f;
+    float ff = 0.7f;
+    float fr = 0.5f;
     float tf = std::sqrt(5.f);
     float tr = std::sqrt(5.f);
 
@@ -62,8 +59,9 @@ int main(int, char *[]) {
     }
 
     //Translation uniquement
-    //Search::search(modelC, imageC, ff, fr, tf, tr);
-
+    //Search *search = new Search(res);
+    //std::vector<glm::mat3> transforms = search->search(modelC, imageC, ff, fr, tf, tr);
+    //std::cout << "nombre de transformations : " << transforms.size() << std::endl;
 
     /*raster->computeTranslations(transforms, modelC, img.cols, img.rows);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
@@ -105,6 +103,6 @@ int main(int, char *[]) {
 
     delete im;
     delete raster;
-    delete search;
+    //delete search;
     return 0;
 }

@@ -122,9 +122,28 @@ double Distances::f(Cloud& model, Cloud& image, double thau) {
 
     uint cardM = model.size();
     uint cpt = 0;
+    #pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
-        if (delta(model, image, i) <= thau)
+        if (delta(model, image, i) <= thau) {
+            #pragma omp atomic
             cpt++;
+        }
+    }
+    return double(cpt)/double(cardM);
+}
+
+double Distances::f(Cloud& model, cv::Mat& image, double thau) {
+    if (model.size() == 0 || image.total() == 0)
+        return 0;
+
+    uint cardM = model.size();
+    uint cpt = 0;
+    #pragma omp parallel for
+    for (uint i = 0; i < cardM; i++) {
+        if (delta(model[i][0], model[i][1], image) <= thau) {
+            #pragma omp atomic
+            cpt++;
+        }
     }
     return double(cpt)/double(cardM);
 }
