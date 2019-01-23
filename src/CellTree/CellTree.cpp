@@ -21,7 +21,8 @@ CellTree::CellTree(float xmin, float xmax, float ymin, float ymax, float a00min,
     i5 = ii5;
     i6 = ii6;
 
-    std::cout << "test : "
+    std::cout << "###########NEW CELL###############" << std::endl
+              << "test : " << std::endl
               << "a00max = " << a00max << std::endl
               << "a00min = " << a00min << std::endl
               << "a01max = " << a01max << std::endl
@@ -102,49 +103,49 @@ void CellTree::subdivideCell6D(){
         return;
     }*/
     hasChild = true;
-    float mid_x = float(float(this->coord.xmax) + float(this->coord.xmin))/float(R);
-    float mid_y = float(float(this->coord.ymax) + float(this->coord.ymin))/float(R);
-    float mid_a00 = float(float(this->coord.a00max) + float(this->coord.a00min))/float(R);
-    float mid_a01 = float(float(this->coord.a01max) + float(this->coord.a01min))/float(R);
-    float mid_a10 = float(float(this->coord.a10max) + float(this->coord.a10min))/float(R);
-    float mid_a11 = float(float(this->coord.a11max) + float(this->coord.a11min))/float(R);
+    std::vector<float> mid_x =   {this->coord.xmin,   this->coord.xmin+(this->coord.xmax - this->coord.xmin+1)/2.f -1,       this->coord.xmax-(this->coord.xmax - this->coord.xmin-1)/2.f,       this->coord.xmax};
+    std::vector<float> mid_y =   {this->coord.ymin,   this->coord.ymin+(this->coord.ymax - this->coord.ymin+1)/2.f -1,       this->coord.ymax-(this->coord.ymax - this->coord.ymin-1)/2.f,       this->coord.ymax};
+    std::vector<float> mid_a00 = {this->coord.a00min, this->coord.a00min+(this->coord.a00max - this->coord.a00min+1)/2.f -1, this->coord.a00max-(this->coord.a00max - this->coord.a00min-1)/2.f, this->coord.a00max};
+    std::vector<float> mid_a01 = {this->coord.a01min, this->coord.a01min+(this->coord.a01max - this->coord.a01min+1)/2.f -1, this->coord.a01max-(this->coord.a01max - this->coord.a01min-1)/2.f, this->coord.a01max};
+    std::vector<float> mid_a10 = {this->coord.a10min, this->coord.a10min+(this->coord.a10max - this->coord.a10min+1)/2.f -1, this->coord.a10max-(this->coord.a10max - this->coord.a10min-1)/2.f, this->coord.a10max};
+    std::vector<float> mid_a11 = {this->coord.a11min, this->coord.a11min+(this->coord.a11max - this->coord.a11min+1)/2.f -1, this->coord.a11max-(this->coord.a11max - this->coord.a11min-1)/2.f, this->coord.a11max};
 
-    std::cout << "mid_x = " << mid_x << std::endl;
-    std::cout << "mid_y = " << mid_y << std::endl;
-    std::cout << "mid_a00 = " << mid_a00 << std::endl;
-    std::cout << "mid_a01 = " << mid_a01 << std::endl;
-    std::cout << "mid_a10 = " << mid_a10 << std::endl;
-    std::cout << "mid_a11 = " << mid_a11 << std::endl;
+    std::cout << "mid_x = " << mid_x[1] << std::endl;
+    std::cout << "mid_y = " << mid_y[1] << std::endl;
+    std::cout << "mid_a00 = " << mid_a00[1] << std::endl;
+    std::cout << "mid_a01 = " << mid_a01[1] << std::endl;
+    std::cout << "mid_a10 = " << mid_a10[1] << std::endl;
+    std::cout << "mid_a11 = " << mid_a11[1] << std::endl;
 
     for(float i = 0; i < R; i++)
     {
-        float x_min = this->coord.xmin + i * mid_x;
-        float x_max = this->coord.xmax - (1.f-i) * mid_x;
+        float x_min = mid_x[i*2];
+        float x_max = mid_x[i*2+1];
         
         for(float j = 0; j < R; j++)
         {
-            float y_min = this->coord.ymin + j * mid_y;
-            float y_max = this->coord.ymax - (1.f-j) * mid_y;
+            float y_min = mid_y[j*2];
+            float y_max = mid_x[j*2+1];
 
             for(float u = 0; u < R; u++)
             {
-                float a00_min = this->coord.a00min + u * mid_a00;
-                float a00_max = this->coord.a00max - (1.f-u) * mid_a00;
+                float a00_min = mid_a00[u*2];
+                float a00_max = mid_a00[u*2+1];
                 
                 for(float v = 0; v < R; v++)
                 {
-                    float a01_min = this->coord.a01min + v * mid_a01;
-                    float a01_max = this->coord.a01max - (1.f-v) * mid_a01;
+                    float a01_min = mid_a01[v*2];
+                    float a01_max = mid_a01[v*2+1];
                     
                     for(float m = 0; m < R; m++)
                     {
-                        float a10_min = this->coord.a10min + m * mid_a10;
-                        float a10_max = this->coord.a10max - (1.f-m) * mid_a10;
+                        float a10_min = mid_a10[m*2];
+                        float a10_max = mid_a10[m*2+1];
                         
                         for(float n = 0; n < R; n++)
                         {
-                            float a11_min = this->coord.a11min + n * mid_a11;
-                            float a11_max = this->coord.a11max - (1.f-n) * mid_a11;
+                            float a11_min = mid_a11[n*2];
+                            float a11_max = mid_a11[n*2+1];
                             
                             this->children.emplace_back(new CellTree(x_min, x_max, y_min, y_max, a00_min,a00_max,a01_min,a01_max,a10_min,a10_max,a11_min,a11_max,i1,i2,i3,i4,i5,i6, this));
                         }

@@ -53,6 +53,13 @@ int main(int, char *[]) {
     Raster *raster = new Raster(modelC, imageC, res);
     std::vector<glm::mat3> transforms = raster->genTransformations(xMax, yMax, aMax, sMax, dMin, dMax, ff, fr, tf, tr);
     std::cout << "nombre de transformations : " << transforms.size() << std::endl;
+    std::cout << "tes transformations : " << std::endl;
+    for (int i = 0; i < transforms.size(); i++) {
+        std::cout << transforms[i][0][0] << " " << transforms[i][0][1] << " " << transforms[i][0][2] << std::endl
+                  << transforms[i][1][0] << " " << transforms[i][1][1] << " " << transforms[i][1][2] << std::endl
+                  << transforms[i][2][0] << " " << transforms[i][2][1] << " " << transforms[i][2][2] << std::endl
+        << std:: endl;
+    }
 
     //Translation uniquement
     //Search::search(modelC, imageC, ff, fr, tf, tr);

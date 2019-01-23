@@ -197,7 +197,7 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     std::cout << "taille de la  cellule sur th6 = " << th6 << std::endl;*/
 
     //CellTree tree = CellTree(tl5, th5, tl6, th6, tl1, th1, tl2, th2, tl3, th3, tl4, th4, i1, i2, i3, i4, i5, i6);
-    CellTree tree = CellTree(0, xMax, 0, xMax, -1.f/i1, xSize, -1.f/i2, ySize, -1.f/i3, xSize, -1.f/i4, ySize, i1, i2, i3, i4, i5, i6);
+    CellTree tree = CellTree(0, xMax-1, 0, xMax-1, -1.f/i1, xSize-1, -1.f/i2, ySize-1, -1.f/i3, xSize-1, -1.f/i4, ySize-1, i1, i2, i3, i4, i5, i6);
 
     //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
 
