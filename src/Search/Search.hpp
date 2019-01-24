@@ -19,9 +19,6 @@ class Search
 public:
     Search(cv::Mat &_transDist);
 
-    //Return a set of transforms
-    //Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3> transforms);
-    //Transforms search(Cloud &modelCloud, Cloud &imageCloud, std::vector<glm::mat3>& transforms, float ff, float fr, float tf, float tr);
     Transforms search(Cloud &modelCloud, Cloud &imageCloud, float ff, float fr, float tf, float tr);
 
 private:

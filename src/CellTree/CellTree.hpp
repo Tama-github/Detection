@@ -25,9 +25,11 @@ class CellTree
         std::vector<CellTree> getInterestingCells();
         bool hasOneElem();
         glm::mat3 getTransformTL();
+        void printCoordinate();
+
         float w;
         float h;
-        void printCoordinate();
+        int depth;
 
     private:
         struct Coordinate
@@ -47,7 +49,6 @@ class CellTree
         };
         bool hasChild;
         bool isInteresting;
-        int depth;
         CellTree * parent;        
         std::vector<CellTree*> children;
         Coordinate coord;

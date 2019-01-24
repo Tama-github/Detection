@@ -21,17 +21,6 @@ CellTree::CellTree(float xmin, float xmax, float ymin, float ymax, float a00min,
     i5 = ii5;
     i6 = ii6;
 
-    std::cout << "###########NEW CELL###############" << std::endl
-              << "test : " << std::endl
-              << "a00max = " << a00max << std::endl
-              << "a00min = " << a00min << std::endl
-              << "a01max = " << a01max << std::endl
-              << "a01min = " << a01min << std::endl
-              << "a10max = " << a10max << std::endl
-              << "a10min = " << a10min << std::endl
-              << "a11max = " << a11max << std::endl
-              << "a11min = " << a11min << std::endl;
-
     w = (a00max-a00min)+(a01max-a01min)+(xmax-xmin);
     h = (a10max-a10min)+(a11max-a11min)+(ymax-ymin);
 
@@ -58,7 +47,7 @@ CellTree * CellTree::getParent(){
 CellTree * CellTree::getChild(uint number){
     
     if (number > 63) {
-        throw "Position of child must be under 4";
+        throw "Position of child must be under 63";
     }
 
     return this->children[number];
@@ -99,9 +88,7 @@ glm::mat3 CellTree::getTransformTL() {
 }
 
 void CellTree::subdivideCell6D(){
-    /*if (this->depth == MAX_DEPTH) {
-        return;
-    }*/
+
     hasChild = true;
     std::vector<float> mid_x =   {this->coord.xmin,   this->coord.xmin+(this->coord.xmax - this->coord.xmin+1)/2.f -1,       this->coord.xmax-(this->coord.xmax - this->coord.xmin-1)/2.f,       this->coord.xmax};
     std::vector<float> mid_y =   {this->coord.ymin,   this->coord.ymin+(this->coord.ymax - this->coord.ymin+1)/2.f -1,       this->coord.ymax-(this->coord.ymax - this->coord.ymin-1)/2.f,       this->coord.ymax};
@@ -110,12 +97,6 @@ void CellTree::subdivideCell6D(){
     std::vector<float> mid_a10 = {this->coord.a10min, this->coord.a10min+(this->coord.a10max - this->coord.a10min+1)/2.f -1, this->coord.a10max-(this->coord.a10max - this->coord.a10min-1)/2.f, this->coord.a10max};
     std::vector<float> mid_a11 = {this->coord.a11min, this->coord.a11min+(this->coord.a11max - this->coord.a11min+1)/2.f -1, this->coord.a11max-(this->coord.a11max - this->coord.a11min-1)/2.f, this->coord.a11max};
 
-    std::cout << "mid_x = " << mid_x[1] << std::endl;
-    std::cout << "mid_y = " << mid_y[1] << std::endl;
-    std::cout << "mid_a00 = " << mid_a00[1] << std::endl;
-    std::cout << "mid_a01 = " << mid_a01[1] << std::endl;
-    std::cout << "mid_a10 = " << mid_a10[1] << std::endl;
-    std::cout << "mid_a11 = " << mid_a11[1] << std::endl;
 
     for(float i = 0; i < R; i++)
     {
@@ -157,9 +138,7 @@ void CellTree::subdivideCell6D(){
 }
 
 void CellTree::subdivideCell2D(){
-    /*if (this->depth == MAX_DEPTH) {
-        return;
-    }*/
+
     hasChild = true;
     float mid_x = float(float(this->coord.xmax) + float(this->coord.xmin))/float(R);
     float mid_y = float(float(this->coord.ymax) + float(this->coord.ymin))/float(R);
@@ -182,21 +161,7 @@ void CellTree::subdivideCell2D(){
 }
 
 void CellTree::displayMe(){
-    /*
-    //std::cout << this->depth << std::endl;
-    if(this->children[0] == nullptr)
-    {
-        return;
-    }
-    std::cout << this->depth;
-    printCoordinate(this->coord);
-    
-    for(int i = 0; i < CHILDREN_NUMBER; i++)
-    {        
-        this->children[i]->displayMe();
-    }
-    std::cout << "   " << std::endl;
-    */
+
     std::cout << "Me :" << std::endl;
     this->printCoordinate();
 

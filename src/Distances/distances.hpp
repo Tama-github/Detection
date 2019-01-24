@@ -20,9 +20,7 @@ public:
 
     static double hDKth(Cloud &A, Cloud &B, float k);
 
-    /*
-        return min distance(L2) between indth point of m and image
-    */
+
     static double delta(Cloud& model, Cloud& image, uint ind);
     static double delta(float x, float y, cv::Mat &image);
     static double deltap(Cloud& model, cv::Mat &image, float x, float y, float w, float h);
@@ -33,7 +31,6 @@ public:
 
     static cv::Mat distanceTransform(cv::Mat& img);
 
-   // static double probe (std::vector<glm::vec2>& A, )
 
 private:
 

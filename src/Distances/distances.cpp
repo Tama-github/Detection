@@ -83,25 +83,10 @@ uint findInd(Cloud& cloud, float x, float y) {
 }
 
 double Distances::deltap(Cloud& model, cv::Mat& image, float x, float y, float w, float h) {
-    /*double minDist = std::numeric_limits<double>::max();
-    for (float i = x; i <= x+w; i++) {
-        for (float j = y; j <= x+h; j++) {
-            uint ind = findInd(model, i, j);
-            double dist;
-            if (ind == std::numeric_limits<uint>::max() || ind > model.size())
-                dist = std::numeric_limits<double>::max();
-            else
-                dist = delta(model, image, ind);
-            if (minDist > dist)
-                minDist = dist;
-        }
-    }
-    return minDist;*/
+
     double minDist = std::numeric_limits<double>::max();
-    //float j;
     w = w+1;
     h = h+1;
-    //#pragma omp parallel for reduction(min:minDist)
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
             double dist = std::numeric_limits<double>::max();
@@ -110,7 +95,6 @@ double Distances::deltap(Cloud& model, cv::Mat& image, float x, float y, float w
             if (minDist > dist)
                 minDist = dist;
         }
-        //std::cout << "iter = " << i-x << std::endl;
     }
 
     return minDist;
@@ -157,9 +141,6 @@ double Distances::fp(Cloud& model, cv::Mat& image, double t, float w, float h) {
     #pragma omp parallel for
     for (uint i = 0; i < cardM; i++) {
         double d = deltap(model, image, model[i][0], model[i][1], w, h);
-        //if (cpt != 0)
-            //std::cout << "iter = " << i << "/" << cardM << "   |   deltap = " << d << "   |   cpt = " << cpt << std::endl;
-        //std::cout << "iter = " << i << "/" << cardM << std::endl;
         if (d <= t) {
             #pragma omp atomic
             cpt++;
@@ -182,18 +163,11 @@ cv::Mat Distances::distanceTransform(cv::Mat& img) {
     im.imwrite("DistTransformFunction.png", img);
     cv::Mat res = cv::Mat::zeros(img.rows, img.cols, CV_32SC1);
 
-
-//    cv::Mat matCloud;
-  //  cv::findNonZero(img, matCloud);
     int rows = img.rows;
     int cols = img.cols;
-    //img = res = cv::Mat::zeros(rows, cols, CV_32F);
 
     uint cpt = 0;
     for (unsigned int i = 0; i < img.total(); i++ ) {
-        //cloud.push_back(glm::vec2(matCloud.at<cv::Point>(int(i)).x,matCloud.at<cv::Point>(int(i)).y));
-
-      //  img.at<float>(matCloud.at<cv::Point>(int(i)).x, matCloud.at<cv::Point>(int(i)).y) = 255.f;
         std::cout << img.at<float>(int(i)) << std::endl;
         if (img.at<float>(int(i)) != 0.f)
             cpt++;
@@ -205,37 +179,23 @@ cv::Mat Distances::distanceTransform(cv::Mat& img) {
     float *inputImg = (float*)(img.data);
     float *output = (float*)(res.data);
 
-    //#pragma omp parallel for
     for (uint i = 0; i < uint(rows); i++) {
         for (uint j = 0; j < uint(cols); j++) {
-           // std::cout << img.at<float>(i, j) << std::endl;
             float distMin = std::numeric_limits<float>::max();
             for (uint k = 0; k < uint(rows); k++) {
                 for (uint l = 0; l < uint(cols); l++) {
-                    //std::cout << "distance : " << img.at<int>(int(k), int(l)) << std::endl;
                     float dist = 0.f;
-                    //if (img.at<float>(int(k), int(l)) != 0.f && i!=k && j!=l) {
-                      //  dist = glm::length(glm::vec2(float(i), float(j)) - glm::vec2(float(k), float(l)));
                     if (inputImg[uint(cols) * l + k] != 0.f && i != k && j != l)  {
                         dist = glm::length(glm::vec2(float(i), float(j)) - glm::vec2(float(k), float(l)));
-                        //#pragma omp critical
-                        //{
-                            if (distMin > dist)
-                                distMin = dist;
-                            //std::cout << dist << std::endl;
-
-                        //}
+                        if (distMin > dist)
+                            distMin = dist;
                     }
                 }
             }
             std::cout << "distMin : " << distMin << std::endl;
-            //res.at<float>(int(i), int(j)) = distMin;
             output[uint(cols) * j + i] = distMin;
         }
-       // std::cout << float(i)/float(img.rows)*100.f << "%" << std::endl;
     }
-    //cv::rotate(res, res, 0);
-    //cv::flip(res, res, 1);
 
     return res;
 }

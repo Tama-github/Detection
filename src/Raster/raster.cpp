@@ -36,70 +36,6 @@ bool Raster::isValid(float aMax, float sMax, float dMin, float dMax, glm::mat3 t
     return false;
 }
 
-/*std::vector<glm::mat3> Raster::getTranslations(std::vector<glm::mat3>& transforms, uint nTranslation, uint xMax, uint yMax) {
-
-
-    uint totalTransforms = uint(xMax * yMax);
-
-    if (totalTransforms < nTranslation)
-        nTranslation = totalTransforms;
-    std::vector<glm::mat3> trans;
-    int xTranslation = int(nTranslation / xMax);
-    int yTranslation = int(nTranslation % yMax);
-
-    for (uint t = 0; t < uint(transforms.size()); t++) {
-        glm::mat3 newTrans = transforms[t];
-        newTrans[0][2] = xTranslation;
-        newTrans[1][2] = yTranslation;
-        trans.emplace_back(newTrans);
-    }
-    return trans;
-}*/
-
-/*glm::mat3 Raster::getTranslation(std::vector<glm::mat3>& transforms, uint nTranslation, uint nTransform, uint xMax, uint yMax) {
-    uint totalTransforms = uint(xMax * yMax);
-
-    if (totalTransforms < nTranslation)
-        nTranslation = totalTransforms;
-    glm::mat3 trans;
-    int xTranslation = int(nTranslation / xMax);
-    int yTranslation = int(nTranslation % yMax);
-    std::cout << "coucou1" << std::endl;
-    std::cout << "nTransform : " << nTransform << ", transfoSize ! " << transforms.size()  << std::endl;
-
-    glm::mat3 newTrans = transforms[nTransform];
-    newTrans[0][2] = xTranslation;
-    newTrans[1][2] = yTranslation;
-    std::cout << "coucou2" << std::endl;
-    trans = newTrans;
-
-    return trans;
-}*/
-
-/*void Raster::computeTranslations(std::vector<glm::mat3>& transforms, Cloud& model, float xMax, float yMax) {
-    //std::vector<glm::mat3> newTransforms = transforms;
-    #pragma omp parallel for
-    for (unsigned int t = 0; t < transforms.size(); t++) {
-        std::cout << "Raster::computeTranslations  : " << ((float)t*100/(float)(transforms.size())) << "%"<< std::endl;
-        for (unsigned int i = 0; i < xMax; i+= xMax/10) {
-            for (unsigned int j = 0; j < yMax; j+= yMax/10) {
-                glm::mat3 m = transforms[t];
-                m[0][2] += i;
-                m[1][2] += j;
-                //if(isInImage(model, xMax, yMax, m))
-                  //  newTransforms.emplace_back(m);
-                #pragma omp critical
-                {
-                    transforms.emplace_back(m);
-                }
-            }
-        }
-        //std::cout << "coucou " << (t+1)/float(transforms.size())*100 << std::endl;
-    }
-    //transforms = newTransforms;
-    //return;
-}*/
-
 float Raster::clamp2N(float X) {
     bool stop = false;
     float u = 2;
@@ -116,12 +52,10 @@ float Raster::clamp2N(float X) {
 
 bool Raster::forwardCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
     return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
-    //return Distances::hDKth(modelCloud, imageCloud, f) < t;
 }
 
 bool Raster::reverseCriterion (Cloud& modelCloud, Cloud& imageCloud, float f, float t) {
     return Distances::f(modelCloud, imageCloud, double(t)) >= double(f);
-    //return Distances::hDKth(imageCloud, modelCloud, f) < t;
 }
 
 bool Raster::isCellInteresting(Cloud& modelCloud, cv::Mat& imageCloud, float f, float t, float w, float h) {
@@ -129,7 +63,7 @@ bool Raster::isCellInteresting(Cloud& modelCloud, cv::Mat& imageCloud, float f, 
 }
 
 std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float aMax, float sMax, float dMin, float dMax, float ff, float fr, float tf, float tr) {
-    std::cout << "Starting transform compute" << std::endl;
+    std::cout << "Starting cell decomposition algorythm" << std::endl;
     std::vector<glm::mat3> res = {};
     // Definition of the unitary displacement on each dimension of the trasformation space.
     float i1 = 1/xMax;
@@ -156,16 +90,6 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     float xSize = 2.f/i1;
     float ySize = 2.f/i2;
 
-    /*std::cout << "Before the clamping " << std::endl;
-    std::cout << "xMax = " << xMax << std::endl;
-    std::cout << "yMax = " << yMax << std::endl;
-    std::cout << "i1|i3 = " << i1 << std::endl;
-    std::cout << "i2|i4 = " << i2 << std::endl;
-
-    std::cout << "taille de la  cellule sur i1|i3 = " << xSize << std::endl;
-    std::cout << "taille de la  cellule sur i2|i4 = " << ySize << std::endl;
-    std::cout << "taille de la  cellule sur i5 = " << xMax << std::endl;
-    std::cout << "taille de la  cellule sur i6 = " << yMax << std::endl;*/
 
     xSize = clamp2N(xSize);
     ySize = clamp2N(ySize);
@@ -182,61 +106,34 @@ std::vector<glm::mat3> Raster::genTransformations(float xMax, float yMax, float 
     th2 = th4 = (ySize * i2);
     th5 = th6 = xMax;
 
-    std::cout << "Space bondaries :  xSize = " << xSize*i1 << "  |  ySize = " << ySize*i2 << std::endl;
-
-    /*std::cout << "After the clamping " << std::endl;
-
-    std::cout << "th1|th3 = " << th1 << std::endl;
-    std::cout << "th2|th4 = " << th2 << std::endl;
-    std::cout << "th5 = " << th5 << std::endl;
-    std::cout << "th6 = " << th6 << std::endl;
-
-    std::cout << "taille de la  cellule sur th1|th3 = " << th1/i1 << std::endl;
-    std::cout << "taille de la  cellule sur th2|th4 = " << th2/i2 << std::endl;
-    std::cout << "taille de la  cellule sur th5 = " << th5 << std::endl;
-    std::cout << "taille de la  cellule sur th6 = " << th6 << std::endl;*/
-
-    //CellTree tree = CellTree(tl5, th5, tl6, th6, tl1, th1, tl2, th2, tl3, th3, tl4, th4, i1, i2, i3, i4, i5, i6);
+    //Space creation on the root cell
     CellTree tree = CellTree(0, xMax-1, 0, xMax-1, -1.f/i1, xSize-1, -1.f/i2, ySize-1, -1.f/i3, xSize-1, -1.f/i4, ySize-1, i1, i2, i3, i4, i5, i6);
 
-    //std::cout << "(w,h) = (" << tree.w << ", " << tree.h << ")" << std::endl;
-
     tree.subdivideCell6D();
-    tree.displayMe();
 
     std::vector<CellTree*> cells = tree.getChilds();
     for (uint i = 0; i < cells.size(); i++) {
-        std::cout << "____________________________________________________" << std::endl
-                  << "(c'est le lol pourcentage) " << (float(i+1)*100.f/float(cells.size())) << "%" << std::endl;
         CellTree* currentCell = cells[i];
-        currentCell->printCoordinate();
+        std::cout << "(pourcentage / depth = " << currentCell->depth << ")  " << (float(i+1)*100.f/float(cells.size())) << "%" << std::endl;
+
         if (currentCell->hasOneElem()) {
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
             Cloud subImage = image.getSubCloud(transformModel.getBox());
-            if (reverseCriterion(transformModel, subImage, fr, tr))
+
+            if (isValid(aMax, sMax, dMin, dMax, matrix) && reverseCriterion(transformModel, subImage, fr, tr))
                 res.emplace_back(matrix);
 
         } else {
-
             glm::mat3 matrix = currentCell->getTransformTL();
             Cloud transformModel = model.transformCloud(matrix);
-            //Cloud subImage = image.getSubCloud(transformModel.getBox());
-            std::cout << "w et h : " << currentCell->w << ", " << currentCell->h << std::endl;
-            std::cout << "juste avant intersting" << std::endl;
-            //std::cout << "tailles de model & subImage : " << transformModel.size() << ", " << subImage.size() << std::endl;
-
             bool isInteresting = isCellInteresting(transformModel, transformImage, ff, tf, std::abs(currentCell->w), std::abs(currentCell->h));
-            std::cout << "juste après intersting : " << isInteresting << std::endl;
-
-
             if (isInteresting) {
                 currentCell->subdivideCell6D();
                 std::vector<CellTree*> tmp = currentCell->getChilds();
                 cells.erase(cells.begin());
-                cells.insert(cells.end(), tmp.begin(), tmp.end());
+                cells.insert(cells.begin(), tmp.begin(), tmp.end());
             } else {
-
                 cells.erase(cells.begin());
             }
             i--;

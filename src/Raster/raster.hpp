@@ -32,10 +32,6 @@ private:
     Cloud& image;
     cv::Mat& transformImage;
 
-//    static glm::mat3 getTranslation(std::vector<glm::mat3>& transforms, uint nTranslation, uint nTransform, uint xMax, uint yMax);
-//    static std::vector<glm::mat3> getTranslations(std::vector<glm::mat3>& transforms, uint nTranslation, uint xMax, uint yMax);
-
-
 };
 
 #endif // RASTER_H
